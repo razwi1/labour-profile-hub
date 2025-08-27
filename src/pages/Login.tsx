@@ -4,13 +4,30 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
+import loginGraphics from "@/assets/login-graphics.jpg";
 
 const Login = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4 relative overflow-hidden">
+      <div 
+        className="absolute top-10 right-10 w-64 h-48 opacity-20 rounded-lg"
+        style={{
+          backgroundImage: `url(${loginGraphics})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      ></div>
+      <div 
+        className="absolute bottom-10 left-10 w-48 h-36 opacity-15 rounded-lg rotate-12"
+        style={{
+          backgroundImage: `url(${loginGraphics})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      ></div>
+      <Card className="w-full max-w-md relative z-10 backdrop-blur-sm border-border/50">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>
