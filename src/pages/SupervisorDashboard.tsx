@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { StarRating } from "@/components/StarRating";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import WorkerLocationMap from "@/components/WorkerLocationMap";
 import workerProfile from "@/assets/worker-profile.jpg";
 
 interface Employee {
@@ -41,6 +42,12 @@ interface Employee {
   dailySalary: number;
   overallRating: number;
   avatar?: string;
+  location: {
+    lat: number;
+    lng: number;
+    address: string;
+  };
+  status: 'active' | 'break' | 'offline';
 }
 
 const SupervisorDashboard = () => {
@@ -55,7 +62,9 @@ const SupervisorDashboard = () => {
       supervisorRating: 4.5,
       dailySalary: 800,
       overallRating: 4.7,
-      avatar: workerProfile
+      avatar: workerProfile,
+      location: { lat: 19.0760, lng: 72.8777, address: "Block A - Foundation" },
+      status: 'active' as const
     },
     {
       id: 2,
@@ -65,7 +74,9 @@ const SupervisorDashboard = () => {
       hoursWorked: 7.5,
       supervisorRating: 4.2,
       dailySalary: 750,
-      overallRating: 4.3
+      overallRating: 4.3,
+      location: { lat: 19.0761, lng: 72.8778, address: "Block A - Level 2" },
+      status: 'active' as const
     },
     {
       id: 3,
@@ -75,7 +86,9 @@ const SupervisorDashboard = () => {
       hoursWorked: 0,
       supervisorRating: 3.8,
       dailySalary: 500,
-      overallRating: 3.9
+      overallRating: 3.9,
+      location: { lat: 19.0759, lng: 72.8776, address: "Block A - Storage" },
+      status: 'offline' as const
     },
     {
       id: 4,
@@ -85,7 +98,9 @@ const SupervisorDashboard = () => {
       hoursWorked: 8,
       supervisorRating: 4.8,
       dailySalary: 900,
-      overallRating: 4.9
+      overallRating: 4.9,
+      location: { lat: 19.0762, lng: 72.8779, address: "Block A - Electrical Room" },
+      status: 'break' as const
     }
   ]);
 
@@ -94,7 +109,12 @@ const SupervisorDashboard = () => {
     position: "Site Supervisor",
     company: "ABC Construction Ltd.",
     companyRating: 4.6,
-    experience: "12+ Years"
+    experience: "12+ Years",
+    currentSite: {
+      name: "Skyline Apartments - Block A",
+      location: "Bandra West, Mumbai",
+      coordinates: { lat: 19.0760, lng: 72.8777 }
+    }
   };
 
   const toggleAttendance = (id: number) => {
@@ -183,6 +203,11 @@ const SupervisorDashboard = () => {
                     <span>{supervisorData.companyRating}</span>
                   </div>
                 </div>
+                <div className="mt-3 p-3 bg-white/10 rounded-lg">
+                  <p className="text-sm font-medium opacity-95">Current Site:</p>
+                  <p className="text-sm opacity-90">{supervisorData.currentSite.name}</p>
+                  <p className="text-xs opacity-80">{supervisorData.currentSite.location}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -238,6 +263,9 @@ const SupervisorDashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Worker Location Map */}
+        <WorkerLocationMap workers={employees} />
 
         {/* Employee Management Table */}
         <Card>

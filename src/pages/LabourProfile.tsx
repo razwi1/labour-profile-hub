@@ -36,6 +36,12 @@ const LabourProfile = () => {
     skills: ["Concrete Work", "Steel Fixing", "Site Management", "Quality Control", "Team Leadership"],
     totalBudget: 500000,
     amountPaid: 350000,
+    currentWorkLocation: {
+      siteName: "Skyline Apartments - Block A",
+      address: "Bandra West, Mumbai",
+      workArea: "Foundation Level - Section 2",
+      startDate: "2024-01-15"
+    },
     documents: [
       { name: "AADHAR CARD", status: 'verified' as const },
       { name: "PAN CARD", status: 'verified' as const },
@@ -106,6 +112,40 @@ const LabourProfile = () => {
               current={profileData.amountPaid}
               total={profileData.totalBudget}
             />
+          </CardContent>
+        </Card>
+
+        {/* Current Work Location */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="w-5 h-5" />
+              Current Work Location
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div>
+                <p className="font-semibold text-lg">{profileData.currentWorkLocation.siteName}</p>
+                <p className="text-muted-foreground">{profileData.currentWorkLocation.address}</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Work Area</p>
+                  <p className="font-medium">{profileData.currentWorkLocation.workArea}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Started On</p>
+                  <p className="font-medium">{new Date(profileData.currentWorkLocation.startDate).toLocaleDateString('en-IN')}</p>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">Currently Active on Site</span>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
