@@ -88,6 +88,13 @@ const Login = () => {
             >
               Demo Supervisor Dashboard
             </Button>
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => navigate('/client-dashboard')}
+            >
+              Demo Client Dashboard
+            </Button>
           </div>
           
           <div className="text-center text-sm">
