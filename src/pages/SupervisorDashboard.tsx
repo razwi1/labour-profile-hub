@@ -30,6 +30,7 @@ import {
 import { StarRating } from "@/components/StarRating";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import WorkerLocationMap from "@/components/WorkerLocationMap";
+import StatusIndicator from "@/components/StatusIndicator";
 import workerProfile from "@/assets/worker-profile.jpg";
 
 interface Employee {
@@ -163,6 +164,53 @@ const SupervisorDashboard = () => {
     { name: 'Equipment', value: 15000, fill: '#ffc658' },
   ];
 
+  // Generate status indicators based on supervisor data
+  const getStatusItems = () => {
+    const items = [];
+    
+    // Attendance Status
+    const attendanceRate = (presentEmployees / employees.length) * 100;
+    if (attendanceRate >= 90) {
+      items.push({ section: 'Team Attendance', status: 'good' as const, message: `Excellent attendance (${attendanceRate.toFixed(1)}%)` });
+    } else if (attendanceRate >= 75) {
+      items.push({ section: 'Team Attendance', status: 'warning' as const, message: `Moderate attendance (${attendanceRate.toFixed(1)}%)` });
+    } else {
+      items.push({ section: 'Team Attendance', status: 'critical' as const, message: `Poor attendance (${attendanceRate.toFixed(1)}%)`, actionRequired: 'Address absenteeism issues' });
+    }
+
+    // Performance Status
+    const avgRating = employees.reduce((sum, emp) => sum + emp.supervisorRating, 0) / employees.length;
+    if (avgRating >= 4.5) {
+      items.push({ section: 'Team Performance', status: 'good' as const, message: `High performance team (${avgRating.toFixed(1)}/5)` });
+    } else if (avgRating >= 3.5) {
+      items.push({ section: 'Team Performance', status: 'warning' as const, message: `Average performance (${avgRating.toFixed(1)}/5)` });
+    } else {
+      items.push({ section: 'Team Performance', status: 'critical' as const, message: `Low performance (${avgRating.toFixed(1)}/5)`, actionRequired: 'Performance improvement needed' });
+    }
+
+    // Cost Management
+    const avgHourlyRate = dailyPayroll / totalHours;
+    if (avgHourlyRate <= 100) {
+      items.push({ section: 'Cost Management', status: 'good' as const, message: 'Labor costs under control' });
+    } else if (avgHourlyRate <= 150) {
+      items.push({ section: 'Cost Management', status: 'warning' as const, message: 'Monitor labor costs closely' });
+    } else {
+      items.push({ section: 'Cost Management', status: 'critical' as const, message: 'High labor costs detected', actionRequired: 'Review workforce efficiency' });
+    }
+
+    // Safety & Operations
+    const offlineWorkers = employees.filter(emp => emp.status === 'offline').length;
+    if (offlineWorkers === 0) {
+      items.push({ section: 'Site Operations', status: 'good' as const, message: 'All workers accounted for' });
+    } else if (offlineWorkers <= 1) {
+      items.push({ section: 'Site Operations', status: 'warning' as const, message: `${offlineWorkers} worker offline` });
+    } else {
+      items.push({ section: 'Site Operations', status: 'critical' as const, message: `${offlineWorkers} workers offline`, actionRequired: 'Check worker status immediately' });
+    }
+
+    return items;
+  };
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -212,6 +260,12 @@ const SupervisorDashboard = () => {
             </div>
           </div>
         </Card>
+
+        {/* Status Overview */}
+        <StatusIndicator 
+          title="Supervisor Dashboard Status"
+          statusItems={getStatusItems()}
+        />
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

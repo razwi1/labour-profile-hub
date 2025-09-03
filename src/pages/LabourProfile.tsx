@@ -20,6 +20,7 @@ import {
 import { ProgressBar } from "@/components/ProgressBar";
 import { DocumentStatus } from "@/components/DocumentStatus";
 import { StarRating } from "@/components/StarRating";
+import StatusIndicator from "@/components/StatusIndicator";
 import workerProfile from "@/assets/worker-profile.jpg";
 
 const LabourProfile = () => {
@@ -51,6 +52,48 @@ const LabourProfile = () => {
     ]
   });
 
+  // Generate status indicators based on profile data
+  const getStatusItems = () => {
+    const items = [];
+    
+    // Payment Status
+    const paymentPercent = (profileData.amountPaid / profileData.totalBudget) * 100;
+    if (paymentPercent >= 90) {
+      items.push({ section: 'Payment Status', status: 'good' as const, message: 'Payments up to date' });
+    } else if (paymentPercent >= 70) {
+      items.push({ section: 'Payment Status', status: 'warning' as const, message: 'Payment partially pending' });
+    } else {
+      items.push({ section: 'Payment Status', status: 'critical' as const, message: 'Significant payment pending', actionRequired: 'Contact admin for payment' });
+    }
+
+    // Document Status
+    const verifiedDocs = profileData.documents.filter(doc => doc.status === 'verified').length;
+    const pendingDocs = profileData.documents.filter(doc => doc.status === 'pending').length;
+    const requiredDocs = profileData.documents.filter(doc => doc.status === 'required').length;
+    
+    if (requiredDocs > 0) {
+      items.push({ section: 'Documentation', status: 'critical' as const, message: `${requiredDocs} documents required`, actionRequired: 'Submit missing documents' });
+    } else if (pendingDocs > 0) {
+      items.push({ section: 'Documentation', status: 'warning' as const, message: `${pendingDocs} documents under review` });
+    } else {
+      items.push({ section: 'Documentation', status: 'good' as const, message: 'All documents verified' });
+    }
+
+    // Performance Status
+    if (profileData.rating >= 4.5) {
+      items.push({ section: 'Performance Rating', status: 'good' as const, message: `Excellent performance (${profileData.rating}/5)` });
+    } else if (profileData.rating >= 3.5) {
+      items.push({ section: 'Performance Rating', status: 'warning' as const, message: `Good performance (${profileData.rating}/5)` });
+    } else {
+      items.push({ section: 'Performance Rating', status: 'critical' as const, message: `Performance needs improvement (${profileData.rating}/5)`, actionRequired: 'Skill development recommended' });
+    }
+
+    // Work Status
+    items.push({ section: 'Work Status', status: 'good' as const, message: 'Currently active on site' });
+
+    return items;
+  };
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-6xl mx-auto space-y-6">
@@ -65,6 +108,13 @@ const LabourProfile = () => {
             Logout
           </Button>
         </div>
+
+        {/* Status Overview */}
+        <StatusIndicator 
+          title="Profile Status Overview"
+          statusItems={getStatusItems()}
+        />
+
         {/* Header Section */}
         <Card className="overflow-hidden">
           <div className="bg-gradient-to-r from-primary to-blue-600 p-6 text-primary-foreground">

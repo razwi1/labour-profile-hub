@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, FileText, Camera, AlertTriangle, CreditCard, Shield, Home, LogOut, CheckCircle, Clock, DollarSign, Calendar as CalendarIcon } from 'lucide-react';
 import { ProgressBar } from '@/components/ProgressBar';
+import StatusIndicator from '@/components/StatusIndicator';
 import { useNavigate } from 'react-router-dom';
 
 const ClientDashboard = () => {
@@ -63,6 +64,51 @@ const ClientDashboard = () => {
     navigate('/');
   };
 
+  // Generate status indicators based on project data
+  const getStatusItems = () => {
+    const items = [];
+    
+    // Progress Status
+    if (projectData.progress >= 90) {
+      items.push({ section: 'Project Progress', status: 'good' as const, message: 'Project is nearing completion' });
+    } else if (projectData.progress >= 60) {
+      items.push({ section: 'Project Progress', status: 'warning' as const, message: 'Project progressing but monitor timeline' });
+    } else {
+      items.push({ section: 'Project Progress', status: 'critical' as const, message: 'Project behind schedule', actionRequired: 'Review timeline and resources' });
+    }
+
+    // Budget Status
+    const budgetUtilization = (projectData.budget.spent / projectData.budget.planned) * 100;
+    if (budgetUtilization <= 80) {
+      items.push({ section: 'Budget Management', status: 'good' as const, message: 'Budget is well controlled' });
+    } else if (budgetUtilization <= 95) {
+      items.push({ section: 'Budget Management', status: 'warning' as const, message: 'Budget utilization high, monitor expenses' });
+    } else {
+      items.push({ section: 'Budget Management', status: 'critical' as const, message: 'Budget overrun detected', actionRequired: 'Immediate cost review needed' });
+    }
+
+    // Approvals Status
+    if (projectData.approvalsTotal === 0) {
+      items.push({ section: 'Pending Approvals', status: 'good' as const, message: 'No pending approvals' });
+    } else if (projectData.approvalsTotal <= 2) {
+      items.push({ section: 'Pending Approvals', status: 'warning' as const, message: `${projectData.approvalsTotal} approvals pending` });
+    } else {
+      items.push({ section: 'Pending Approvals', status: 'critical' as const, message: `${projectData.approvalsTotal} approvals pending`, actionRequired: 'Review and expedite approvals' });
+    }
+
+    // Issues Status
+    const unresolvedIssues = issueLog.filter(issue => issue.status !== 'Resolved').length;
+    if (unresolvedIssues === 0) {
+      items.push({ section: 'Issue Management', status: 'good' as const, message: 'All issues resolved' });
+    } else if (unresolvedIssues <= 1) {
+      items.push({ section: 'Issue Management', status: 'warning' as const, message: `${unresolvedIssues} issue in progress` });
+    } else {
+      items.push({ section: 'Issue Management', status: 'critical' as const, message: `${unresolvedIssues} unresolved issues`, actionRequired: 'Follow up with contractors' });
+    }
+
+    return items;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -83,6 +129,14 @@ const ClientDashboard = () => {
       </header>
 
       <div className="p-6">
+        {/* Status Overview */}
+        <div className="mb-6">
+          <StatusIndicator 
+            title="Project Status Overview"
+            statusItems={getStatusItems()}
+          />
+        </div>
+
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
