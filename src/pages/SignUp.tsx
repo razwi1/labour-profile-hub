@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase, isSupabaseReady } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import loginGraphics from "@/assets/login-graphics.jpg";
 
@@ -41,6 +41,18 @@ const SignUp = () => {
   };
 
   const handleSignUp = async () => {
+    // Check if Supabase is available
+    if (!isSupabaseReady) {
+      toast({
+        title: "Demo Mode",
+        description: "Supabase integration is being set up. This will redirect to verification page for demo purposes.",
+        variant: "default"
+      });
+      // For demo purposes, navigate to verification page
+      navigate('/verification-pending');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",

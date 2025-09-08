@@ -13,7 +13,7 @@ import {
   Users,
   Shield
 } from "lucide-react";
-import { supabase, type UserProfile } from "@/lib/supabase";
+import { supabase, isSupabaseReady, type UserProfile } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 
 const AdminDashboard = () => {
@@ -27,6 +27,43 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchUsers = async () => {
+    if (!isSupabaseReady) {
+      toast({
+        title: "Demo Mode",
+        description: "Supabase integration is being set up. Showing demo data.",
+        variant: "default"
+      });
+      
+      // Show demo data for development
+      const demoUsers: UserProfile[] = [
+        {
+          id: '1',
+          email: 'john.doe@example.com',
+          first_name: 'John',
+          last_name: 'Doe',
+          role: 'labour',
+          verification_status: 'pending',
+          documents: ['id-card.pdf', 'certificate.pdf'],
+          created_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          email: 'jane.smith@example.com',
+          first_name: 'Jane',
+          last_name: 'Smith',
+          role: 'supervisor',
+          verification_status: 'pending',
+          documents: ['resume.pdf'],
+          created_at: new Date().toISOString()
+        }
+      ];
+      
+      setPendingUsers(demoUsers);
+      setVerifiedUsers([]);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('user_profiles')
@@ -52,6 +89,26 @@ const AdminDashboard = () => {
   };
 
   const handleUserVerification = async (userId: string, status: 'approved' | 'rejected') => {
+    if (!isSupabaseReady) {
+      toast({
+        title: "Demo Mode",
+        description: `User would be ${status} in production`,
+        variant: "default"
+      });
+      
+      // Simulate the action for demo
+      if (status === 'approved') {
+        const userToMove = pendingUsers.find(u => u.id === userId);
+        if (userToMove) {
+          setPendingUsers(prev => prev.filter(u => u.id !== userId));
+          setVerifiedUsers(prev => [...prev, { ...userToMove, verification_status: 'approved' }]);
+        }
+      } else {
+        setPendingUsers(prev => prev.filter(u => u.id !== userId));
+      }
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('user_profiles')
