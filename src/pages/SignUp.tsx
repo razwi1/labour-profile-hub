@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import { useState } from "react";
-import { supabase, isSupabaseReady } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import loginGraphics from "@/assets/login-graphics.jpg";
 
@@ -32,7 +32,34 @@ const SignUp = () => {
   const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setDocuments(prev => [...prev, ...newFiles]);
+      
+      // Validate files
+      const validFiles: File[] = [];
+      for (const file of newFiles) {
+        // Check file type (PDF only)
+        if (file.type !== 'application/pdf') {
+          toast({
+            title: "Invalid File Type",
+            description: `${file.name} is not a PDF file. Only PDF files are allowed.`,
+            variant: "destructive"
+          });
+          continue;
+        }
+        
+        // Check file size (50MB limit)
+        if (file.size > 50 * 1024 * 1024) {
+          toast({
+            title: "File Too Large",
+            description: `${file.name} exceeds the 50MB limit.`,
+            variant: "destructive"
+          });
+          continue;
+        }
+        
+        validFiles.push(file);
+      }
+      
+      setDocuments(prev => [...prev, ...validFiles]);
     }
   };
 
@@ -41,18 +68,6 @@ const SignUp = () => {
   };
 
   const handleSignUp = async () => {
-    // Check if Supabase is available
-    if (!isSupabaseReady) {
-      toast({
-        title: "Demo Mode",
-        description: "Supabase integration is being set up. This will redirect to verification page for demo purposes.",
-        variant: "default"
-      });
-      // For demo purposes, navigate to verification page
-      navigate('/verification-pending');
-      return;
-    }
-
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -83,47 +98,53 @@ const SignUp = () => {
     setIsLoading(true);
 
     try {
-      // Sign up user
+      // Sign up user with auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`
+        }
       });
 
       if (authError) throw authError;
 
-      if (authData.user) {
-        // Upload documents
-        const documentUrls: string[] = [];
-        for (const doc of documents) {
-          const fileExt = doc.name.split('.').pop();
-          const fileName = `${authData.user.id}/${Date.now()}.${fileExt}`;
-          
-          const { error: uploadError } = await supabase.storage
-            .from('documents')
-            .upload(fileName, doc);
+      // Upload documents to "New Documents" bucket
+      const documentUrls: string[] = [];
+      for (const doc of documents) {
+        const fileExt = doc.name.split('.').pop();
+        const fileName = `${formData.email}/${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('New Documents')
+          .upload(fileName, doc);
 
-          if (!uploadError) {
-            documentUrls.push(fileName);
-          }
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+        } else {
+          documentUrls.push(fileName);
         }
-
-        // Create user profile
-        const { error: profileError } = await supabase
-          .from('user_profiles')
-          .insert({
-            id: authData.user.id,
-            email: formData.email,
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            role: formData.role,
-            verification_status: 'pending',
-            documents: documentUrls
-          });
-
-        if (profileError) throw profileError;
-
-        navigate('/verification-pending');
       }
+
+      // Store user data in New_Join table
+      const { error: insertError } = await supabase
+        .from('New_Join')
+        .insert({
+          'First Name': formData.firstName,
+          'Last Name': formData.lastName,
+          'Email': formData.email,
+          'User Role': formData.role
+        });
+
+      if (insertError) throw insertError;
+
+      toast({
+        title: "Success",
+        description: "Account created successfully! Please check your email for verification.",
+        variant: "default"
+      });
+
+      navigate('/verification-pending');
     } catch (error: any) {
       toast({
         title: "Error",
@@ -245,7 +266,7 @@ const SignUp = () => {
               <input
                 type="file"
                 multiple
-                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                accept=".pdf"
                 onChange={handleDocumentUpload}
                 className="hidden"
                 id="document-upload"
@@ -255,7 +276,7 @@ const SignUp = () => {
                 className="cursor-pointer flex flex-col items-center gap-2"
               >
                 <Upload className="h-8 w-8 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Click to upload documents</span>
+                <span className="text-sm text-muted-foreground">Click to upload PDF documents (Max 50MB each)</span>
               </label>
             </div>
             
