@@ -3,12 +3,125 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Upload, X } from "lucide-react";
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 import loginGraphics from "@/assets/login-graphics.jpg";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: ''
+  });
+  const [documents, setDocuments] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setDocuments(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeDocument = (index: number) => {
+    setDocuments(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSignUp = async () => {
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.role) {
+      toast({
+        title: "Error",
+        description: "Please select a user role",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (documents.length === 0) {
+      toast({
+        title: "Error",
+        description: "Please upload at least one document",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Sign up user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (authError) throw authError;
+
+      if (authData.user) {
+        // Upload documents
+        const documentUrls: string[] = [];
+        for (const doc of documents) {
+          const fileExt = doc.name.split('.').pop();
+          const fileName = `${authData.user.id}/${Date.now()}.${fileExt}`;
+          
+          const { error: uploadError } = await supabase.storage
+            .from('documents')
+            .upload(fileName, doc);
+
+          if (!uploadError) {
+            documentUrls.push(fileName);
+          }
+        }
+
+        // Create user profile
+        const { error: profileError } = await supabase
+          .from('user_profiles')
+          .insert({
+            id: authData.user.id,
+            email: formData.email,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            role: formData.role,
+            verification_status: 'pending',
+            documents: documentUrls
+          });
+
+        if (profileError) throw profileError;
+
+        navigate('/verification-pending');
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4 relative overflow-hidden">
@@ -48,30 +161,118 @@ const SignUp = () => {
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" placeholder="John" />
+              <Input 
+                id="firstName" 
+                placeholder="John" 
+                value={formData.firstName}
+                onChange={(e) => handleInputChange('firstName', e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" placeholder="Doe" />
+              <Input 
+                id="lastName" 
+                placeholder="Doe"
+                value={formData.lastName}
+                onChange={(e) => handleInputChange('lastName', e.target.value)}
+              />
             </div>
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="Enter your email" />
+            <Input 
+              id="email" 
+              type="email" 
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="role">User Role</Label>
+            <Select value={formData.role} onValueChange={(value) => handleInputChange('role', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select your role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="labour">Labour</SelectItem>
+                <SelectItem value="supervisor">Supervisor</SelectItem>
+                <SelectItem value="site_manager">Site Manager</SelectItem>
+                <SelectItem value="client_contractor">Client/Contractor</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="Create a password" />
+            <Input 
+              id="password" 
+              type="password" 
+              placeholder="Create a password"
+              value={formData.password}
+              onChange={(e) => handleInputChange('password', e.target.value)}
+            />
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input id="confirmPassword" type="password" placeholder="Confirm your password" />
+            <Input 
+              id="confirmPassword" 
+              type="password" 
+              placeholder="Confirm your password"
+              value={formData.confirmPassword}
+              onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Upload Documents</Label>
+            <div className="border-2 border-dashed border-border rounded-lg p-4">
+              <input
+                type="file"
+                multiple
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                onChange={handleDocumentUpload}
+                className="hidden"
+                id="document-upload"
+              />
+              <label
+                htmlFor="document-upload"
+                className="cursor-pointer flex flex-col items-center gap-2"
+              >
+                <Upload className="h-8 w-8 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Click to upload documents</span>
+              </label>
+            </div>
+            
+            {documents.length > 0 && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Uploaded Documents:</Label>
+                {documents.map((doc, index) => (
+                  <div key={index} className="flex items-center justify-between bg-muted p-2 rounded">
+                    <span className="text-sm truncate">{doc.name}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeDocument(index)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           
-          <Button className="w-full">Create Account</Button>
+          <Button 
+            className="w-full" 
+            onClick={handleSignUp}
+            disabled={isLoading}
+          >
+            {isLoading ? "Creating Account..." : "Create Account"}
+          </Button>
           
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
