@@ -126,14 +126,14 @@ const SignUp = () => {
         }
       }
 
-      // Store user data in New_Join table
-      const { error: insertError } = await supabase
+      // Store user data in New_Join table (types will be updated after DB schema sync)
+      const { error: insertError } = await (supabase as any)
         .from('New_Join')
         .insert({
-          'First Name': formData.firstName,
-          'Last Name': formData.lastName,
-          'Email': formData.email,
-          'User Role': formData.role
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          user_role: formData.role
         });
 
       if (insertError) throw insertError;

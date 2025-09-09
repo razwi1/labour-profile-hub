@@ -2,107 +2,110 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* LabourLink Design System - Construction Industry Theme */
 
 @layer base {
   :root {
-    --background: 240 10% 98%;
-    --foreground: 240 10% 9%;
+    /* Base backgrounds - Light gray with frosted glass effect */
+    --background: 0 0% 96%; /* #F5F5F5 */
+    --foreground: 0 0% 17%; /* #2B2B2B - Dark charcoal */
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 9%;
+    /* Card backgrounds - White for contrast */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 0 0% 17%; /* #2B2B2B */
 
+    /* Popover backgrounds */
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 9%;
+    --popover-foreground: 0 0% 17%;
 
-    --primary: 214 84% 56%;
+    /* Navigation & Headers - Deep navy blue */
+    --primary: 209 52% 22%; /* #1C3D5A */
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 240 10% 9%;
+    /* Secondary backgrounds */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 17%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 240 4% 46%;
+    /* Muted elements */
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 220 14% 96%;
-    --accent-foreground: 240 10% 9%;
+    /* Accent elements */
+    --accent: 0 0% 94%;
+    --accent-foreground: 0 0% 17%;
 
-    --success: 142 76% 36%;
+    /* Safety Green for success states */
+    --success: 120 61% 34%; /* Green for safety/growth */
     --success-foreground: 0 0% 98%;
 
-    --warning: 48 96% 53%;
-    --warning-foreground: 240 10% 9%;
+    /* Construction Yellow for warnings/highlights */
+    --warning: 45 95% 48%; /* #F4A300 */
+    --warning-foreground: 0 0% 17%;
 
-    --destructive: 0 84% 60%;
+    /* Safety Red for destructive actions */
+    --destructive: 0 69% 55%; /* #D94141 */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 214 84% 56%;
+    /* CTA Button variants */
+    --cta-red: 0 69% 55%; /* #D94141 - Safety red */
+    --cta-yellow: 45 95% 48%; /* #F4A300 - Construction yellow */
 
-    --radius: 0.75rem;
+    /* Borders and inputs */
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 209 52% 22%;
 
-    --sidebar-background: 0 0% 98%;
+    /* Border radius for curved elements */
+    --radius: 1rem;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Sidebar - Deep navy theme */
+    --sidebar-background: 209 52% 22%; /* #1C3D5A */
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 209 52% 22%;
+    --sidebar-accent: 209 40% 30%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 209 40% 30%;
+    --sidebar-ring: 45 95% 48%;
 
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Custom frosted glass variables */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
 
   .dark {
-    --background: 240 10% 4%;
+    --background: 0 0% 8%;
     --foreground: 0 0% 98%;
-
-    --card: 240 10% 6%;
+    --card: 0 0% 10%;
     --card-foreground: 0 0% 98%;
-
-    --popover: 240 10% 6%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
-
-    --primary: 214 84% 56%;
+    --primary: 209 52% 35%;
     --primary-foreground: 0 0% 98%;
-
-    --secondary: 240 4% 16%;
+    --secondary: 0 0% 14%;
     --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-
-    --accent: 240 4% 16%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 14%;
     --accent-foreground: 0 0% 98%;
-
-    --success: 142 76% 36%;
+    --success: 120 61% 34%;
     --success-foreground: 0 0% 98%;
-
-    --warning: 48 96% 53%;
-    --warning-foreground: 240 10% 9%;
-
-    --destructive: 0 63% 31%;
+    --warning: 45 95% 48%;
+    --warning-foreground: 0 0% 17%;
+    --destructive: 0 69% 55%;
     --destructive-foreground: 0 0% 98%;
-
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 214 84% 56%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 209 52% 35%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 6%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 45 95% 48%;
   }
 }
 
@@ -113,5 +116,90 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(28, 61, 90, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(244, 163, 0, 0.1) 0%, transparent 50%);
+    backdrop-filter: blur(20px);
+  }
+}
+
+@layer components {
+  /* Frosted glass card effect */
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg;
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* Curved quad containers */
+  .curved-quad {
+    @apply rounded-3xl transition-all duration-500 ease-in-out transform;
+    border-radius: 24px;
+  }
+
+  .curved-quad:hover {
+    @apply scale-105;
+  }
+
+  .curved-quad.expanded {
+    @apply scale-110 z-10;
+  }
+
+  .curved-quad.shrunk {
+    @apply scale-95 opacity-75;
+  }
+
+  /* CTA button variants */
+  .btn-cta-red {
+    @apply bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg;
+    background-color: hsl(var(--cta-red));
+  }
+
+  .btn-cta-yellow {
+    @apply bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg;
+    background-color: hsl(var(--cta-yellow));
+  }
+
+  /* Fluid animations */
+  .animate-fluid {
+    @apply transition-all duration-700 ease-out;
+  }
+
+  /* Dashboard grid */
+  .dashboard-grid {
+    @apply grid gap-6 p-6;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+
+  /* Navigation styles */
+  .nav-header {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 100%);
+    @apply shadow-lg backdrop-blur-lg;
+  }
+}
+
+@layer utilities {
+  /* Safety colors for highlights */
+  .text-safety-green {
+    color: hsl(var(--success));
+  }
+  
+  .text-construction-yellow {
+    color: hsl(var(--warning));
+  }
+  
+  .text-safety-red {
+    color: hsl(var(--destructive));
+  }
+
+  .bg-safety-green {
+    background-color: hsl(var(--success));
+  }
+  
+  .bg-construction-yellow {
+    background-color: hsl(var(--warning));
+  }
+  
+  .bg-safety-red {
+    background-color: hsl(var(--destructive));
   }
 }
