@@ -25,12 +25,15 @@ import {
   Users,
   LogOut,
   CheckCircle,
-  XCircle
+  XCircle,
+  MapPin,
+  Target
 } from "lucide-react";
 import { StarRating } from "@/components/StarRating";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import WorkerLocationMap from "@/components/WorkerLocationMap";
 import StatusIndicator from "@/components/StatusIndicator";
+import { GlassDashboardLayout } from "@/components/layout/GlassDashboardLayout";
 import workerProfile from "@/assets/worker-profile.jpg";
 
 interface Employee {
@@ -212,111 +215,101 @@ const SupervisorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header with Logout */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Supervisor Dashboard</h1>
-          <Button 
-            variant="outline" 
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </Button>
-        </div>
-
-        {/* Supervisor Profile */}
-        <Card>
-          <div className="bg-gradient-to-r from-primary to-blue-600 p-6 text-primary-foreground">
-            <div className="flex items-center gap-6">
-              <Avatar className="w-20 h-20 border-4 border-white/20">
-                <AvatarImage src={workerProfile} alt={supervisorData.name} />
-                <AvatarFallback className="text-xl bg-white/20">
-                  {supervisorData.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              
-              <div className="flex-1">
-                <h2 className="text-2xl font-bold mb-1">{supervisorData.name}</h2>
-                <p className="text-lg opacity-90 mb-2">{supervisorData.position}</p>
-                <div className="flex items-center gap-4 text-sm opacity-90">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4" />
-                    {supervisorData.company}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <StarRating rating={supervisorData.companyRating} size="sm" />
-                    <span>{supervisorData.companyRating}</span>
-                  </div>
+    <GlassDashboardLayout 
+      title="Supervisor Dashboard" 
+      userRole="supervisor"
+      heroContent={
+        <div className="hero-card animate-slide-up">
+          <div className="flex items-center gap-8">
+            <Avatar className="w-24 h-24 border-4 border-secondary/30">
+              <AvatarImage src={workerProfile} alt={supervisorData.name} />
+              <AvatarFallback className="text-2xl bg-accent text-foreground">
+                {supervisorData.name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
+            </Avatar>
+            
+            <div className="flex-1">
+              <h2 className="text-4xl font-bold text-gradient mb-2">{supervisorData.name}</h2>
+              <p className="text-xl text-muted-foreground mb-4">{supervisorData.position}</p>
+              <div className="flex items-center gap-6 text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-5 h-5" />
+                  <span className="font-medium">{supervisorData.company}</span>
                 </div>
-                <div className="mt-3 p-3 bg-white/10 rounded-lg">
-                  <p className="text-sm font-medium opacity-95">Current Site:</p>
-                  <p className="text-sm opacity-90">{supervisorData.currentSite.name}</p>
-                  <p className="text-xs opacity-80">{supervisorData.currentSite.location}</p>
+                <div className="flex items-center gap-2">
+                  <StarRating rating={supervisorData.companyRating} size="sm" />
+                  <span>{supervisorData.companyRating}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  <span>{supervisorData.currentSite.location}</span>
                 </div>
               </div>
             </div>
           </div>
-        </Card>
-
-        {/* Status Overview */}
-        <StatusIndicator 
-          title="Supervisor Dashboard Status"
-          statusItems={getStatusItems()}
-        />
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Present Today</p>
-                  <p className="text-2xl font-bold">{presentEmployees}/{employees.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Hours</p>
-                  <p className="text-2xl font-bold">{totalHours}h</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <IndianRupee className="w-5 h-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Daily Payroll</p>
-                  <p className="text-2xl font-bold">₹{dailyPayroll.toLocaleString()}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Weekly Payroll</p>
-                  <p className="text-2xl font-bold">₹{weeklyPayroll.toLocaleString()}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
+      }
+    >
+      {/* Status Overview */}
+      <StatusIndicator 
+        title="Site Management Overview"
+        statusItems={getStatusItems()}
+      />
+
+      {/* KPI Cards */}
+      <div className="dashboard-grid">
+        <div className="dashboard-card hover-lift">
+          <div className="flex items-center gap-4">
+            <div className="neuro-container p-4 rounded-2xl">
+              <Users className="w-8 h-8 text-success" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground font-medium">Team Attendance</p>
+              <p className="text-3xl font-bold text-gradient">{presentEmployees}/{employees.length}</p>
+              <p className="text-sm text-success">+12% vs last week</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="dashboard-card hover-lift">
+          <div className="flex items-center gap-4">
+            <div className="neuro-container p-4 rounded-2xl">
+              <Clock className="w-8 h-8 text-warning" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground font-medium">Total Hours Today</p>
+              <p className="text-3xl font-bold text-gradient">{totalHours}h</p>
+              <p className="text-sm text-warning">Target: 32h</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="dashboard-card hover-lift">
+          <div className="flex items-center gap-4">
+            <div className="neuro-container p-4 rounded-2xl">
+              <IndianRupee className="w-8 h-8 text-secondary" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground font-medium">Daily Payroll</p>
+              <p className="text-3xl font-bold text-gradient">₹{dailyPayroll.toLocaleString()}</p>
+              <p className="text-sm text-success">Within budget</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="dashboard-card hover-lift">
+          <div className="flex items-center gap-4">
+            <div className="neuro-container p-4 rounded-2xl">
+              <Target className="w-8 h-8 text-destructive" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground font-medium">Weekly Target</p>
+              <p className="text-3xl font-bold text-gradient">₹{weeklyPayroll.toLocaleString()}</p>
+              <p className="text-sm text-muted-foreground">85% achieved</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
         {/* Worker Location Map */}
         <WorkerLocationMap workers={employees} />
