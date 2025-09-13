@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import loginGraphics from "@/assets/login-graphics.jpg";
 
@@ -97,63 +96,16 @@ const SignUp = () => {
 
     setIsLoading(true);
 
-    try {
-      // Sign up user with auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`
-        }
-      });
-
-      if (authError) throw authError;
-
-      // Upload documents to "New Documents" bucket
-      const documentUrls: string[] = [];
-      for (const doc of documents) {
-        const fileExt = doc.name.split('.').pop();
-        const fileName = `${formData.email}/${Date.now()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('New Documents')
-          .upload(fileName, doc);
-
-        if (uploadError) {
-          console.error('Upload error:', uploadError);
-        } else {
-          documentUrls.push(fileName);
-        }
-      }
-
-      // Store user data in New_Join table (types will be updated after DB schema sync)
-      const { error: insertError } = await (supabase as any)
-        .from('New_Join')
-        .insert({
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          user_role: formData.role
-        });
-
-      if (insertError) throw insertError;
-
+    // Simulate signup process
+    setTimeout(() => {
       toast({
         title: "Success",
         description: "Account created successfully! Please check your email for verification.",
         variant: "default"
       });
-
       navigate('/verification-pending');
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
-    } finally {
       setIsLoading(false);
-    }
+    }, 2000);
   };
 
   return (
