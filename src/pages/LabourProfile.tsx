@@ -95,19 +95,34 @@ const LabourProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* Logout Button */}
-        <div className="flex justify-end mb-4">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </Button>
-        </div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-secondary/10 blur-xl animate-float" />
+      <div className="absolute bottom-32 right-20 w-24 h-24 rounded-full bg-success/10 blur-xl animate-float" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 right-10 w-16 h-16 rounded-full bg-warning/10 blur-xl animate-float" style={{ animationDelay: '2s' }} />
+      
+      <div className="relative z-10 p-6">
+        <div className="max-w-6xl mx-auto space-y-8">
+          {/* Premium Header with Logout */}
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-3">
+              <div className="neuro-container p-3 rounded-xl">
+                <User className="w-6 h-6 text-secondary" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gradient">Labour Profile</h1>
+                <p className="text-sm text-muted-foreground">Personal Dashboard & Management</p>
+              </div>
+            </div>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/')}
+              className="btn-glass flex items-center gap-2 hover:shadow-glow"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
+          </div>
 
         {/* Status Overview */}
         <StatusIndicator 
@@ -115,100 +130,99 @@ const LabourProfile = () => {
           statusItems={getStatusItems()}
         />
 
-        {/* Header Section */}
-        <Card className="overflow-hidden">
-          <div className="bg-gradient-to-r from-primary to-blue-600 p-6 text-primary-foreground">
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              <Avatar className="w-24 h-24 border-4 border-white/20">
+        {/* Premium Hero Section */}
+        <div className="hero-card animate-slide-up">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
+            <div className="relative">
+              <Avatar className="w-32 h-32 border-4 border-secondary/30 shadow-glow">
                 <AvatarImage src={workerProfile} alt={profileData.name} />
-                <AvatarFallback className="text-2xl bg-white/20">
+                <AvatarFallback className="text-3xl bg-accent text-primary">
                   {profileData.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-success rounded-full flex items-center justify-center border-2 border-background">
+                <div className="w-3 h-3 bg-success rounded-full animate-pulse" />
+              </div>
+            </div>
+            
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold text-gradient mb-2">{profileData.name}</h1>
+              <p className="text-xl text-muted-foreground mb-6">{profileData.jobRole}</p>
               
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold mb-2">{profileData.name}</h1>
-                <p className="text-lg opacity-90 mb-3">{profileData.jobRole}</p>
-                
-                <div className="flex flex-wrap gap-4 text-sm opacity-90">
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    {profileData.phone}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    {profileData.email}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    {profileData.placeOfOrigin}
-                  </div>
+              <div className="flex flex-wrap gap-6 text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-5 h-5 text-secondary" />
+                  <span className="font-medium">{profileData.phone}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-secondary" />
+                  <span className="font-medium">{profileData.email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-secondary" />
+                  <span className="font-medium">{profileData.placeOfOrigin}</span>
                 </div>
               </div>
             </div>
           </div>
-        </Card>
+        </div>
 
         {/* Budget Progress Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <IndianRupee className="w-5 h-5" />
-              Project Budget & Payment Status
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ProgressBar 
-              current={profileData.amountPaid}
-              total={profileData.totalBudget}
-            />
-          </CardContent>
-        </Card>
+        <div className="glass-card p-6 hover-lift">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="neuro-container p-3 rounded-xl">
+              <IndianRupee className="w-6 h-6 text-secondary" />
+            </div>
+            <h2 className="text-2xl font-bold text-foreground">Project Budget & Payment Status</h2>
+          </div>
+          <ProgressBar 
+            current={profileData.amountPaid}
+            total={profileData.totalBudget}
+          />
+        </div>
 
         {/* Current Work Location */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Current Work Location
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div>
-                <p className="font-semibold text-lg">{profileData.currentWorkLocation.siteName}</p>
-                <p className="text-muted-foreground">{profileData.currentWorkLocation.address}</p>
+        <div className="glass-card p-6 hover-lift">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="neuro-container p-3 rounded-xl">
+              <MapPin className="w-6 h-6 text-secondary" />
+            </div>
+            <h2 className="text-2xl font-bold text-foreground">Current Work Location</h2>
+          </div>
+          <div className="space-y-6">
+            <div>
+              <p className="font-bold text-2xl text-foreground mb-2">{profileData.currentWorkLocation.siteName}</p>
+              <p className="text-lg text-muted-foreground">{profileData.currentWorkLocation.address}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="glass-container p-4 rounded-xl">
+                <p className="text-sm font-medium text-muted-foreground mb-2">Work Area</p>
+                <p className="font-semibold text-lg text-foreground">{profileData.currentWorkLocation.workArea}</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Work Area</p>
-                  <p className="font-medium">{profileData.currentWorkLocation.workArea}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Started On</p>
-                  <p className="font-medium">{new Date(profileData.currentWorkLocation.startDate).toLocaleDateString('en-IN')}</p>
-                </div>
-              </div>
-              <div className="mt-4 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium">Currently Active on Site</span>
-                </div>
+              <div className="glass-container p-4 rounded-xl">
+                <p className="text-sm font-medium text-muted-foreground mb-2">Started On</p>
+                <p className="font-semibold text-lg text-foreground">{new Date(profileData.currentWorkLocation.startDate).toLocaleDateString('en-IN')}</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            <div className="glass-container p-4 rounded-xl border-glass-accent bg-success/10">
+              <div className="flex items-center gap-3 text-success">
+                <div className="w-3 h-3 bg-success rounded-full animate-pulse"></div>
+                <span className="font-semibold text-lg">Currently Active on Site</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Profile Details */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="w-5 h-5" />
-                Profile Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <User className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Profile Details</h2>
+            </div>
+            <div className="space-y-6">
               {/* Experience & Role */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -261,15 +275,18 @@ const LabourProfile = () => {
               </div>
 
               {/* Add Documents Button */}
-              <Button className="w-full" variant="outline">
+              <Button className="w-full btn-primary" variant="outline">
                 <Upload className="w-4 h-4 mr-2" />
                 Add Documents
               </Button>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Document Verification */}
-          <DocumentStatus documents={profileData.documents} />
+          <div className="glass-card p-6 hover-lift">
+            <DocumentStatus documents={profileData.documents} />
+          </div>
+        </div>
         </div>
       </div>
     </div>

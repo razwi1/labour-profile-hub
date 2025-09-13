@@ -221,28 +221,33 @@ const SupervisorDashboard = () => {
       heroContent={
         <div className="hero-card animate-slide-up">
           <div className="flex items-center gap-8">
-            <Avatar className="w-24 h-24 border-4 border-secondary/30">
-              <AvatarImage src={workerProfile} alt={supervisorData.name} />
-              <AvatarFallback className="text-2xl bg-accent text-foreground">
-                {supervisorData.name.split(' ').map(n => n[0]).join('')}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative">
+              <Avatar className="w-32 h-32 border-4 border-secondary/30 shadow-glow">
+                <AvatarImage src={workerProfile} alt={supervisorData.name} />
+                <AvatarFallback className="text-3xl bg-accent text-primary">
+                  {supervisorData.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-success rounded-full flex items-center justify-center border-2 border-background">
+                <div className="w-3 h-3 bg-success rounded-full animate-pulse" />
+              </div>
+            </div>
             
             <div className="flex-1">
               <h2 className="text-4xl font-bold text-gradient mb-2">{supervisorData.name}</h2>
-              <p className="text-xl text-muted-foreground mb-4">{supervisorData.position}</p>
+              <p className="text-xl text-muted-foreground mb-6">{supervisorData.position}</p>
               <div className="flex items-center gap-6 text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <Building2 className="w-5 h-5" />
+                  <Building2 className="w-5 h-5 text-secondary" />
                   <span className="font-medium">{supervisorData.company}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <StarRating rating={supervisorData.companyRating} size="sm" />
-                  <span>{supervisorData.companyRating}</span>
+                  <span className="font-semibold">{supervisorData.companyRating}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  <span>{supervisorData.currentSite.location}</span>
+                  <MapPin className="w-5 h-5 text-secondary" />
+                  <span className="font-medium">{supervisorData.currentSite.location}</span>
                 </div>
               </div>
             </div>
@@ -266,7 +271,7 @@ const SupervisorDashboard = () => {
             <div>
               <p className="text-sm text-muted-foreground font-medium">Team Attendance</p>
               <p className="text-3xl font-bold text-gradient">{presentEmployees}/{employees.length}</p>
-              <p className="text-sm text-success">+12% vs last week</p>
+              <p className="text-sm text-success font-semibold">+12% vs last week</p>
             </div>
           </div>
         </div>
@@ -279,7 +284,7 @@ const SupervisorDashboard = () => {
             <div>
               <p className="text-sm text-muted-foreground font-medium">Total Hours Today</p>
               <p className="text-3xl font-bold text-gradient">{totalHours}h</p>
-              <p className="text-sm text-warning">Target: 32h</p>
+              <p className="text-sm text-warning font-semibold">Target: 32h</p>
             </div>
           </div>
         </div>
@@ -292,7 +297,7 @@ const SupervisorDashboard = () => {
             <div>
               <p className="text-sm text-muted-foreground font-medium">Daily Payroll</p>
               <p className="text-3xl font-bold text-gradient">₹{dailyPayroll.toLocaleString()}</p>
-              <p className="text-sm text-success">Within budget</p>
+              <p className="text-sm text-success font-semibold">Within budget</p>
             </div>
           </div>
         </div>
@@ -305,7 +310,7 @@ const SupervisorDashboard = () => {
             <div>
               <p className="text-sm text-muted-foreground font-medium">Weekly Target</p>
               <p className="text-3xl font-bold text-gradient">₹{weeklyPayroll.toLocaleString()}</p>
-              <p className="text-sm text-muted-foreground">85% achieved</p>
+              <p className="text-sm text-muted-foreground font-semibold">85% achieved</p>
             </div>
           </div>
         </div>
@@ -315,43 +320,43 @@ const SupervisorDashboard = () => {
         <WorkerLocationMap workers={employees} />
 
         {/* Employee Management Table */}
-        <Card>
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                Employee Management
-              </CardTitle>
-              <Button className="flex items-center gap-2">
-                <UserPlus className="w-4 h-4" />
-                Add Worker
-              </Button>
+        <div className="glass-card p-6 hover-lift">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-3">
+              <div className="neuro-container p-3 rounded-xl">
+                <Users className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Employee Management</h2>
             </div>
-          </CardHeader>
-          <CardContent>
+            <Button className="btn-primary flex items-center gap-2">
+              <UserPlus className="w-4 h-4" />
+              Add Worker
+            </Button>
+          </div>
+          <div className="glass-table">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Employee</TableHead>
-                  <TableHead>Attendance</TableHead>
-                  <TableHead>Hours</TableHead>
-                  <TableHead>Supervisor Rating</TableHead>
-                  <TableHead>Daily Salary</TableHead>
-                  <TableHead>Overall Rating</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead className="text-foreground font-semibold">Employee</TableHead>
+                  <TableHead className="text-foreground font-semibold">Attendance</TableHead>
+                  <TableHead className="text-foreground font-semibold">Hours</TableHead>
+                  <TableHead className="text-foreground font-semibold">Supervisor Rating</TableHead>
+                  <TableHead className="text-foreground font-semibold">Daily Salary</TableHead>
+                  <TableHead className="text-foreground font-semibold">Overall Rating</TableHead>
+                  <TableHead className="text-foreground font-semibold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {employees.map((employee) => (
-                  <TableRow key={employee.id}>
+                  <TableRow key={employee.id} className="hover:bg-glass-bg-secondary">
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="w-8 h-8">
+                        <Avatar className="w-10 h-10 border-2 border-secondary/20">
                           <AvatarImage src={employee.avatar} alt={employee.name} />
-                          <AvatarFallback>{employee.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                          <AvatarFallback className="bg-accent text-primary font-semibold">{employee.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium">{employee.name}</p>
+                          <p className="font-semibold text-foreground">{employee.name}</p>
                           <p className="text-sm text-muted-foreground">{employee.role}</p>
                         </div>
                       </div>
@@ -361,7 +366,7 @@ const SupervisorDashboard = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => toggleAttendance(employee.id)}
-                        className={employee.attendance ? "text-green-600" : "text-red-600"}
+                        className={`neuro-button ${employee.attendance ? "text-success hover:bg-success/20" : "text-destructive hover:bg-destructive/20"}`}
                       >
                         {employee.attendance ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                       </Button>
@@ -371,7 +376,7 @@ const SupervisorDashboard = () => {
                         type="number"
                         value={employee.hoursWorked}
                         onChange={(e) => updateHours(employee.id, Number(e.target.value))}
-                        className="w-20"
+                        className="w-20 glass-container border-glass-accent"
                         min="0"
                         max="12"
                       />
@@ -383,26 +388,26 @@ const SupervisorDashboard = () => {
                           type="number"
                           value={employee.supervisorRating}
                           onChange={(e) => updateRating(employee.id, Number(e.target.value))}
-                          className="w-16"
+                          className="w-16 glass-container border-glass-accent"
                           min="1"
                           max="5"
                           step="0.1"
                         />
                       </div>
                     </TableCell>
-                    <TableCell>₹{employee.dailySalary}</TableCell>
+                    <TableCell className="font-bold text-foreground">₹{employee.dailySalary}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <StarRating rating={employee.overallRating} size="sm" />
-                        <span className="text-sm">{employee.overallRating}</span>
+                        <span className="text-sm font-semibold text-foreground">{employee.overallRating}</span>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" className="btn-glass">
                           <Edit className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-red-600">
+                        <Button variant="ghost" size="sm" className="btn-glass text-destructive hover:bg-destructive/20">
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -411,104 +416,132 @@ const SupervisorDashboard = () => {
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Analytics Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Attendance Trends */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Attendance Trends</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={attendanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="present" fill="#22c55e" name="Present" />
-                  <Bar dataKey="absent" fill="#ef4444" name="Absent" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <TrendingUp className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Weekly Attendance Trends</h2>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={attendanceData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
+                <YAxis stroke="rgba(255,255,255,0.6)" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    color: 'white'
+                  }} 
+                />
+                <Bar dataKey="present" fill="#22c55e" name="Present" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="absent" fill="#ef4444" name="Absent" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
           {/* Hours Worked */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Monthly Hours Worked</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={hoursData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="hours" stroke="#8884d8" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <Clock className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Monthly Hours Worked</h2>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={hoursData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
+                <YAxis stroke="rgba(255,255,255,0.6)" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    color: 'white'
+                  }} 
+                />
+                <Line type="monotone" dataKey="hours" stroke="#FACC15" strokeWidth={3} dot={{ fill: '#FACC15', strokeWidth: 2, r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
 
           {/* Cost Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Cost Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={costData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
-                  >
-                    {costData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value) => `₹${Number(value).toLocaleString()}`} />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <IndianRupee className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Weekly Cost Distribution</h2>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={costData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
+                  labelLine={false}
+                >
+                  {costData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  formatter={(value) => `₹${Number(value).toLocaleString()}`}
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    color: 'white'
+                  }} 
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
 
           {/* Productivity Overview */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Productivity Metrics</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <p className="text-2xl font-bold text-primary">{((presentEmployees / employees.length) * 100).toFixed(1)}%</p>
-                  <p className="text-sm text-muted-foreground">Attendance Rate</p>
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <Target className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Productivity Metrics</h2>
+            </div>
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="glass-container p-6 rounded-xl text-center hover:bg-glass-bg-secondary transition-all duration-300">
+                  <p className="text-3xl font-bold text-gradient">{((presentEmployees / employees.length) * 100).toFixed(1)}%</p>
+                  <p className="text-sm text-muted-foreground font-semibold">Attendance Rate</p>
                 </div>
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <p className="text-2xl font-bold text-primary">{(totalHours / employees.length).toFixed(1)}h</p>
-                  <p className="text-sm text-muted-foreground">Avg Hours/Employee</p>
+                <div className="glass-container p-6 rounded-xl text-center hover:bg-glass-bg-secondary transition-all duration-300">
+                  <p className="text-3xl font-bold text-gradient">{(totalHours / employees.length).toFixed(1)}h</p>
+                  <p className="text-sm text-muted-foreground font-semibold">Avg Hours/Employee</p>
                 </div>
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <p className="text-2xl font-bold text-primary">₹{Math.round(dailyPayroll / totalHours)}</p>
-                  <p className="text-sm text-muted-foreground">Cost per Hour</p>
+                <div className="glass-container p-6 rounded-xl text-center hover:bg-glass-bg-secondary transition-all duration-300">
+                  <p className="text-3xl font-bold text-gradient">₹{Math.round(dailyPayroll / totalHours)}</p>
+                  <p className="text-sm text-muted-foreground font-semibold">Cost per Hour</p>
                 </div>
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <p className="text-2xl font-bold text-primary">{(employees.reduce((sum, emp) => sum + emp.supervisorRating, 0) / employees.length).toFixed(1)}</p>
-                  <p className="text-sm text-muted-foreground">Avg Team Rating</p>
+                <div className="glass-container p-6 rounded-xl text-center hover:bg-glass-bg-secondary transition-all duration-300">
+                  <p className="text-3xl font-bold text-gradient">{(employees.reduce((sum, emp) => sum + emp.supervisorRating, 0) / employees.length).toFixed(1)}</p>
+                  <p className="text-sm text-muted-foreground font-semibold">Avg Team Rating</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+    </GlassDashboardLayout>
   );
 };
 

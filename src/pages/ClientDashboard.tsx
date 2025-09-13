@@ -110,303 +110,326 @@ const ClientDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-card border-b border-border px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Home className="w-6 h-6 text-primary" />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-secondary/10 blur-xl animate-float" />
+      <div className="absolute bottom-32 right-20 w-24 h-24 rounded-full bg-success/10 blur-xl animate-float" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 right-10 w-16 h-16 rounded-full bg-warning/10 blur-xl animate-float" style={{ animationDelay: '2s' }} />
+      
+      <div className="relative z-10">
+        {/* Premium Header */}
+        <header className="glass-nav h-20 flex items-center justify-between px-8 backdrop-blur-glass border-b border-glass relative z-50">
+          <div className="flex items-center gap-6">
+            <div className="neuro-container p-3 rounded-xl">
+              <Home className="w-6 h-6 text-secondary" />
+            </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">{projectData.clientName}</h1>
-              <p className="text-sm text-muted-foreground">{projectData.projectName}</p>
+              <h1 className="text-2xl font-bold text-gradient">{projectData.clientName}</h1>
+              <p className="text-sm text-muted-foreground font-medium">{projectData.projectName}</p>
             </div>
           </div>
-          <Button variant="ghost" onClick={handleLogout} className="flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            onClick={handleLogout} 
+            className="btn-glass flex items-center gap-2 hover:shadow-glow"
+          >
             <LogOut className="w-4 h-4" />
             Logout
           </Button>
-        </div>
-      </header>
+        </header>
 
-      <div className="p-6">
-        {/* Status Overview */}
-        <div className="mb-6">
-          <StatusIndicator 
-            title="Project Status Overview"
-            statusItems={getStatusItems()}
-          />
-        </div>
+        <div className="p-8 space-y-8">
+          {/* Status Overview */}
+          <div className="animate-fade-in">
+            <StatusIndicator 
+              title="Project Status Overview"
+              statusItems={getStatusItems()}
+            />
+          </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="reports">Reports</TabsTrigger>
-            <TabsTrigger value="issues">Issues</TabsTrigger>
-            <TabsTrigger value="payments">Payments</TabsTrigger>
-            <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          </TabsList>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="glass-container grid w-full grid-cols-2 lg:grid-cols-5 p-2">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-accent data-[state=active]:text-primary">Overview</TabsTrigger>
+              <TabsTrigger value="reports" className="data-[state=active]:bg-accent data-[state=active]:text-primary">Reports</TabsTrigger>
+              <TabsTrigger value="issues" className="data-[state=active]:bg-accent data-[state=active]:text-primary">Issues</TabsTrigger>
+              <TabsTrigger value="payments" className="data-[state=active]:bg-accent data-[state=active]:text-primary">Payments</TabsTrigger>
+              <TabsTrigger value="compliance" className="data-[state=active]:bg-accent data-[state=active]:text-primary">Compliance</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="overview" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              {/* Progress Card */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Project Progress</CardTitle>
-                  <CheckCircle className="w-4 h-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-primary">{projectData.progress}%</div>
-                  <Progress value={projectData.progress} className="mt-2" />
-                </CardContent>
-              </Card>
+            <TabsContent value="overview" className="mt-8">
+              <div className="dashboard-grid mb-8">
+                {/* Progress Card */}
+                <div className="dashboard-card hover-lift">
+                  <div className="flex items-center gap-4">
+                    <div className="neuro-container p-4 rounded-2xl">
+                      <CheckCircle className="w-8 h-8 text-success" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground font-medium">Project Progress</p>
+                      <p className="text-3xl font-bold text-gradient">{projectData.progress}%</p>
+                      <Progress value={projectData.progress} className="mt-2" />
+                    </div>
+                  </div>
+                </div>
 
-              {/* Budget Card */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Budget Status</CardTitle>
-                  <DollarSign className="w-4 h-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-primary">₹{(projectData.budget.spent / 100000).toFixed(1)}L</div>
-                  <p className="text-xs text-muted-foreground">of ₹{(projectData.budget.planned / 100000).toFixed(1)}L planned</p>
-                  <Progress value={(projectData.budget.spent / projectData.budget.planned) * 100} className="mt-2" />
-                </CardContent>
-              </Card>
+                {/* Budget Card */}
+                <div className="dashboard-card hover-lift">
+                  <div className="flex items-center gap-4">
+                    <div className="neuro-container p-4 rounded-2xl">
+                      <DollarSign className="w-8 h-8 text-warning" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground font-medium">Budget Status</p>
+                      <p className="text-3xl font-bold text-gradient">₹{(projectData.budget.spent / 100000).toFixed(1)}L</p>
+                      <p className="text-sm text-muted-foreground">of ₹{(projectData.budget.planned / 100000).toFixed(1)}L planned</p>
+                      <Progress value={(projectData.budget.spent / projectData.budget.planned) * 100} className="mt-2" />
+                    </div>
+                  </div>
+                </div>
 
-              {/* Timeline Card */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Timeline</CardTitle>
-                  <CalendarIcon className="w-4 h-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-primary">{projectData.timeline.completedDays}</div>
-                  <p className="text-xs text-muted-foreground">of {projectData.timeline.totalDays} days</p>
-                  <Progress value={(projectData.timeline.completedDays / projectData.timeline.totalDays) * 100} className="mt-2" />
-                </CardContent>
-              </Card>
+                {/* Timeline Card */}
+                <div className="dashboard-card hover-lift">
+                  <div className="flex items-center gap-4">
+                    <div className="neuro-container p-4 rounded-2xl">
+                      <CalendarIcon className="w-8 h-8 text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground font-medium">Timeline</p>
+                      <p className="text-3xl font-bold text-gradient">{projectData.timeline.completedDays}</p>
+                      <p className="text-sm text-muted-foreground">of {projectData.timeline.totalDays} days</p>
+                      <Progress value={(projectData.timeline.completedDays / projectData.timeline.totalDays) * 100} className="mt-2" />
+                    </div>
+                  </div>
+                </div>
 
-              {/* Approvals Card */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Pending Approvals</CardTitle>
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-destructive">{projectData.approvalsTotal}</div>
-                  <p className="text-xs text-muted-foreground">requiring attention</p>
-                </CardContent>
-              </Card>
-            </div>
+                {/* Approvals Card */}
+                <div className="dashboard-card hover-lift">
+                  <div className="flex items-center gap-4">
+                    <div className="neuro-container p-4 rounded-2xl">
+                      <Clock className="w-8 h-8 text-destructive" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground font-medium">Pending Approvals</p>
+                      <p className="text-3xl font-bold text-gradient">{projectData.approvalsTotal}</p>
+                      <p className="text-sm text-muted-foreground">requiring attention</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            {/* Detailed Progress Sections */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Budget Breakdown</CardTitle>
-                </CardHeader>
-                <CardContent>
+              {/* Detailed Progress Sections */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="glass-card p-6 hover-lift">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="neuro-container p-3 rounded-xl">
+                      <DollarSign className="w-6 h-6 text-secondary" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-foreground">Budget Breakdown</h2>
+                  </div>
                   <ProgressBar 
                     current={projectData.budget.spent} 
                     total={projectData.budget.planned}
-                    className="mb-4"
+                    className="mb-6"
                   />
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Remaining Budget:</span>
-                      <span className="font-medium">₹{((projectData.budget.planned - projectData.budget.spent) / 100000).toFixed(1)}L</span>
+                  <div className="space-y-4">
+                    <div className="flex justify-between text-lg">
+                      <span className="text-muted-foreground">Remaining Budget:</span>
+                      <span className="font-bold text-foreground">₹{((projectData.budget.planned - projectData.budget.spent) / 100000).toFixed(1)}L</span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span>Budget Utilization:</span>
-                      <span className="font-medium">{((projectData.budget.spent / projectData.budget.planned) * 100).toFixed(1)}%</span>
+                    <div className="flex justify-between text-lg">
+                      <span className="text-muted-foreground">Budget Utilization:</span>
+                      <span className="font-bold text-foreground">{((projectData.budget.spent / projectData.budget.planned) * 100).toFixed(1)}%</span>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Milestones Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
+                <div className="glass-card p-6 hover-lift">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="neuro-container p-3 rounded-xl">
+                      <CheckCircle className="w-6 h-6 text-secondary" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-foreground">Milestones Status</h2>
+                  </div>
+                  <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Delivered Milestones</span>
-                      <Badge variant="secondary" className="bg-success/10 text-success">
+                      <span className="text-lg text-muted-foreground">Delivered Milestones</span>
+                      <Badge className="bg-success/20 text-success border-success/30 px-4 py-2 text-lg font-semibold">
                         {projectData.milestones.delivered} Complete
                       </Badge>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Pending Milestones</span>
-                      <Badge variant="outline">
+                      <span className="text-lg text-muted-foreground">Pending Milestones</span>
+                      <Badge variant="outline" className="px-4 py-2 text-lg font-semibold">
                         {projectData.milestones.pending} Pending
                       </Badge>
                     </div>
                     <Progress 
                       value={(projectData.milestones.delivered / (projectData.milestones.delivered + projectData.milestones.pending)) * 100} 
-                      className="mt-4"
+                      className="mt-6"
                     />
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+              </div>
           </TabsContent>
 
-          <TabsContent value="reports" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Camera className="w-5 h-5" />
-                  Site Photos & Reports
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Report Type</TableHead>
-                      <TableHead>Photos</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {siteReports.map((report, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{report.date}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{report.type}</Badge>
-                        </TableCell>
-                        <TableCell>{report.photos} photos</TableCell>
-                        <TableCell>
-                          <Badge variant="secondary" className="bg-success/10 text-success">
-                            {report.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">View</Button>
-                        </TableCell>
+            <TabsContent value="reports" className="mt-8">
+              <div className="glass-card p-6 hover-lift">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="neuro-container p-3 rounded-xl">
+                    <Camera className="w-6 h-6 text-secondary" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-foreground">Site Photos & Reports</h2>
+                </div>
+                <div className="glass-table">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-foreground font-semibold">Date</TableHead>
+                        <TableHead className="text-foreground font-semibold">Report Type</TableHead>
+                        <TableHead className="text-foreground font-semibold">Photos</TableHead>
+                        <TableHead className="text-foreground font-semibold">Status</TableHead>
+                        <TableHead className="text-foreground font-semibold">Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {siteReports.map((report, index) => (
+                        <TableRow key={index} className="hover:bg-glass-bg-secondary">
+                          <TableCell className="font-medium">{report.date}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="border-glass-accent">{report.type}</Badge>
+                          </TableCell>
+                          <TableCell className="text-muted-foreground">{report.photos} photos</TableCell>
+                          <TableCell>
+                            <Badge className="bg-success/20 text-success border-success/30">
+                              {report.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Button variant="ghost" size="sm" className="btn-glass">View</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            </TabsContent>
 
-          <TabsContent value="issues" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5" />
-                  Issue Log & Resolutions
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Ticket ID</TableHead>
-                      <TableHead>Issue Title</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Contractor</TableHead>
-                      <TableHead>Solution</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {issueLog.map((issue) => (
-                      <TableRow key={issue.id}>
-                        <TableCell className="font-mono">{issue.id}</TableCell>
-                        <TableCell>{issue.title}</TableCell>
-                        <TableCell>
-                          <Badge variant={issue.status === 'Resolved' ? 'secondary' : 'outline'}
-                                 className={issue.status === 'Resolved' ? 'bg-success/10 text-success' : ''}>
-                            {issue.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{issue.contractor}</TableCell>
-                        <TableCell className="max-w-xs truncate">{issue.solution}</TableCell>
+            <TabsContent value="issues" className="mt-8">
+              <div className="glass-card p-6 hover-lift">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="neuro-container p-3 rounded-xl">
+                    <AlertTriangle className="w-6 h-6 text-warning" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-foreground">Issue Log & Resolutions</h2>
+                </div>
+                <div className="glass-table">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-foreground font-semibold">Ticket ID</TableHead>
+                        <TableHead className="text-foreground font-semibold">Issue Title</TableHead>
+                        <TableHead className="text-foreground font-semibold">Status</TableHead>
+                        <TableHead className="text-foreground font-semibold">Contractor</TableHead>
+                        <TableHead className="text-foreground font-semibold">Solution</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {issueLog.map((issue) => (
+                        <TableRow key={issue.id} className="hover:bg-glass-bg-secondary">
+                          <TableCell className="font-mono text-secondary">{issue.id}</TableCell>
+                          <TableCell className="font-medium">{issue.title}</TableCell>
+                          <TableCell>
+                            <Badge variant={issue.status === 'Resolved' ? 'secondary' : 'outline'}
+                                   className={issue.status === 'Resolved' ? 'bg-success/20 text-success border-success/30' : 'border-glass-accent'}>
+                              {issue.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-muted-foreground">{issue.contractor}</TableCell>
+                          <TableCell className="max-w-xs truncate text-muted-foreground">{issue.solution}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            </TabsContent>
 
-          <TabsContent value="payments" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="w-5 h-5" />
-                  Payment History
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Recipient</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paymentHistory.map((payment, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{payment.date}</TableCell>
-                        <TableCell>{payment.recipient}</TableCell>
-                        <TableCell>₹{payment.amount.toLocaleString()}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{payment.type}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={payment.status === 'Paid' ? 'secondary' : 'destructive'}
-                                 className={payment.status === 'Paid' ? 'bg-success/10 text-success' : ''}>
-                            {payment.status}
-                          </Badge>
-                        </TableCell>
+            <TabsContent value="payments" className="mt-8">
+              <div className="glass-card p-6 hover-lift">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="neuro-container p-3 rounded-xl">
+                    <CreditCard className="w-6 h-6 text-secondary" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-foreground">Payment History</h2>
+                </div>
+                <div className="glass-table">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-foreground font-semibold">Date</TableHead>
+                        <TableHead className="text-foreground font-semibold">Recipient</TableHead>
+                        <TableHead className="text-foreground font-semibold">Amount</TableHead>
+                        <TableHead className="text-foreground font-semibold">Type</TableHead>
+                        <TableHead className="text-foreground font-semibold">Status</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {paymentHistory.map((payment, index) => (
+                        <TableRow key={index} className="hover:bg-glass-bg-secondary">
+                          <TableCell className="font-medium">{payment.date}</TableCell>
+                          <TableCell className="text-muted-foreground">{payment.recipient}</TableCell>
+                          <TableCell className="font-bold text-foreground">₹{payment.amount.toLocaleString()}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="border-glass-accent">{payment.type}</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant={payment.status === 'Paid' ? 'secondary' : 'destructive'}
+                                   className={payment.status === 'Paid' ? 'bg-success/20 text-success border-success/30' : 'bg-destructive/20 text-destructive border-destructive/30'}>
+                              {payment.status}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            </TabsContent>
 
-          <TabsContent value="compliance" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5" />
-                  Compliance Documents
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+            <TabsContent value="compliance" className="mt-8">
+              <div className="glass-card p-6 hover-lift">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="neuro-container p-3 rounded-xl">
+                    <Shield className="w-6 h-6 text-secondary" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-foreground">Compliance Documents</h2>
+                </div>
                 <div className="space-y-4">
                   {complianceDocuments.map((doc, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-                      <div className="flex items-center gap-3">
-                        <FileText className="w-5 h-5 text-muted-foreground" />
-                        <div>
-                          <p className="font-medium">{doc.name}</p>
-                          <p className="text-sm text-muted-foreground">Updated: {doc.date}</p>
+                    <div key={index} className="glass-container p-6 rounded-xl hover:bg-glass-bg-secondary transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="neuro-container p-3 rounded-xl">
+                            <FileText className="w-6 h-6 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-lg text-foreground">{doc.name}</p>
+                            <p className="text-muted-foreground">Updated: {doc.date}</p>
+                          </div>
                         </div>
+                        <Badge variant={doc.status === 'Approved' ? 'secondary' : 'destructive'}
+                               className={doc.status === 'Approved' ? 'bg-success/20 text-success border-success/30 px-4 py-2 text-lg font-semibold' : 'bg-destructive/20 text-destructive border-destructive/30 px-4 py-2 text-lg font-semibold'}>
+                          {doc.status}
+                        </Badge>
                       </div>
-                      <Badge variant={doc.status === 'Approved' ? 'secondary' : 'destructive'}
-                             className={doc.status === 'Approved' ? 'bg-success/10 text-success' : ''}>
-                        {doc.status}
-                      </Badge>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );
