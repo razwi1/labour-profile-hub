@@ -255,66 +255,67 @@ const SupervisorDashboard = () => {
         </div>
       }
     >
-      {/* Status Overview */}
-      <StatusIndicator 
-        title="Site Management Overview"
-        statusItems={getStatusItems()}
-      />
+      <div className="space-y-8">
+        {/* Status Overview */}
+        <StatusIndicator 
+          title="Site Management Overview"
+          statusItems={getStatusItems()}
+        />
 
-      {/* KPI Cards */}
-      <div className="dashboard-grid">
-        <div className="dashboard-card hover-lift">
-          <div className="flex items-center gap-4">
-            <div className="neuro-container p-4 rounded-2xl">
-              <Users className="w-8 h-8 text-success" />
+        {/* KPI Cards */}
+        <div className="dashboard-grid">
+          <div className="dashboard-card hover-lift">
+            <div className="flex items-center gap-4">
+              <div className="neuro-container p-4 rounded-2xl">
+                <Users className="w-8 h-8 text-success" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Team Attendance</p>
+                <p className="text-3xl font-bold text-gradient">{presentEmployees}/{employees.length}</p>
+                <p className="text-sm text-success font-semibold">+12% vs last week</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground font-medium">Team Attendance</p>
-              <p className="text-3xl font-bold text-gradient">{presentEmployees}/{employees.length}</p>
-              <p className="text-sm text-success font-semibold">+12% vs last week</p>
+          </div>
+          
+          <div className="dashboard-card hover-lift">
+            <div className="flex items-center gap-4">
+              <div className="neuro-container p-4 rounded-2xl">
+                <Clock className="w-8 h-8 text-warning" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Total Hours Today</p>
+                <p className="text-3xl font-bold text-gradient">{totalHours}h</p>
+                <p className="text-sm text-warning font-semibold">Target: 32h</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="dashboard-card hover-lift">
+            <div className="flex items-center gap-4">
+              <div className="neuro-container p-4 rounded-2xl">
+                <IndianRupee className="w-8 h-8 text-secondary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Daily Payroll</p>
+                <p className="text-3xl font-bold text-gradient">₹{dailyPayroll.toLocaleString()}</p>
+                <p className="text-sm text-success font-semibold">Within budget</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="dashboard-card hover-lift">
+            <div className="flex items-center gap-4">
+              <div className="neuro-container p-4 rounded-2xl">
+                <Target className="w-8 h-8 text-destructive" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Weekly Target</p>
+                <p className="text-3xl font-bold text-gradient">₹{weeklyPayroll.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground font-semibold">85% achieved</p>
+              </div>
             </div>
           </div>
         </div>
-        
-        <div className="dashboard-card hover-lift">
-          <div className="flex items-center gap-4">
-            <div className="neuro-container p-4 rounded-2xl">
-              <Clock className="w-8 h-8 text-warning" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground font-medium">Total Hours Today</p>
-              <p className="text-3xl font-bold text-gradient">{totalHours}h</p>
-              <p className="text-sm text-warning font-semibold">Target: 32h</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="dashboard-card hover-lift">
-          <div className="flex items-center gap-4">
-            <div className="neuro-container p-4 rounded-2xl">
-              <IndianRupee className="w-8 h-8 text-secondary" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground font-medium">Daily Payroll</p>
-              <p className="text-3xl font-bold text-gradient">₹{dailyPayroll.toLocaleString()}</p>
-              <p className="text-sm text-success font-semibold">Within budget</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="dashboard-card hover-lift">
-          <div className="flex items-center gap-4">
-            <div className="neuro-container p-4 rounded-2xl">
-              <Target className="w-8 h-8 text-destructive" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground font-medium">Weekly Target</p>
-              <p className="text-3xl font-bold text-gradient">₹{weeklyPayroll.toLocaleString()}</p>
-              <p className="text-sm text-muted-foreground font-semibold">85% achieved</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
         {/* Worker Location Map */}
         <WorkerLocationMap workers={employees} />
@@ -510,6 +511,95 @@ const SupervisorDashboard = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
+          {/* Attendance Trends */}
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <TrendingUp className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Weekly Attendance Trends</h2>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={attendanceData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
+                <YAxis stroke="rgba(255,255,255,0.6)" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    color: 'white'
+                  }} 
+                />
+                <Bar dataKey="present" fill="#22c55e" name="Present" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="absent" fill="#ef4444" name="Absent" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Hours Worked */}
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <Clock className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Monthly Hours Worked</h2>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={hoursData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
+                <YAxis stroke="rgba(255,255,255,0.6)" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    color: 'white'
+                  }} 
+                />
+                <Line type="monotone" dataKey="hours" stroke="#FACC15" strokeWidth={3} dot={{ fill: '#FACC15', strokeWidth: 2, r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Cost Distribution */}
+          <div className="glass-card p-6 hover-lift">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="neuro-container p-3 rounded-xl">
+                <IndianRupee className="w-6 h-6 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Weekly Cost Distribution</h2>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={costData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
+                  labelLine={false}
+                >
+                  {costData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  formatter={(value) => `₹${Number(value).toLocaleString()}`}
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    color: 'white'
+                  }} 
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
 
           {/* Productivity Overview */}
           <div className="glass-card p-6 hover-lift">
@@ -541,6 +631,7 @@ const SupervisorDashboard = () => {
             </div>
           </div>
         </div>
+      </div>
     </GlassDashboardLayout>
   );
 };
