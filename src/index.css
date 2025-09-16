@@ -7,54 +7,58 @@
 
 @layer base {
   :root {
-    /* Premium Glassmorphism Color Palette */
-    /* Primary - Deep Navy Blue */
-    --background: 222 84% 5%; /* #0F172A - Deep navy background */
-    --foreground: 0 0% 98%; /* #FFFFFF - White text */
+    /* macOS Construction Theme - Clean & Professional */
+    --background: 0 0% 100%; /* White background */
+    --foreground: 0 0% 9%; /* Black text */
 
-    /* Glass Card System */
-    --card: 0 0% 100% / 0.08; /* Translucent white cards */
-    --card-foreground: 0 0% 98%; /* White text on cards */
-    --card-border: 0 0% 100% / 0.15; /* Glass border */
+    /* Glass Card System - Minimal */
+    --card: 0 0% 100%; /* White cards */
+    --card-foreground: 0 0% 9%; /* Black text on cards */
+    --card-border: 0 0% 85%; /* Light border */
 
     /* Popover backgrounds */
-    --popover: 0 0% 100% / 0.12;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
 
-    /* Premium Primary - Deep Navy */
-    --primary: 222 84% 5%; /* #0F172A */
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 222 84% 15%; /* Lighter navy for glow */
+    /* Construction Orange Primary */
+    --primary: 25 95% 53%; /* #FB923C - Construction Orange */
+    --primary-foreground: 0 0% 100%; /* White text on orange */
+    --primary-glow: 25 95% 60%; /* Lighter orange for glow */
 
-    /* Construction Yellow Accent */
-    --secondary: 48 96% 53%; /* #FACC15 - Construction Yellow */
-    --secondary-foreground: 222 84% 5%;
+    /* Neutral Secondary */
+    --secondary: 0 0% 96%; /* Light gray */
+    --secondary-foreground: 0 0% 9%;
 
-    /* Muted glass elements */
-    --muted: 0 0% 100% / 0.05;
-    --muted-foreground: 0 0% 64%; /* #CBD5E1 */
+    /* Muted elements - macOS style */
+    --muted: 0 0% 96%; /* Light gray background */
+    --muted-foreground: 0 0% 45%; /* Medium gray text */
 
-    /* Glass accent system */
-    --accent: 0 0% 100% / 0.1;
-    --accent-foreground: 0 0% 98%;
+    /* Accent system */
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 9%;
 
-    /* Status Colors - High Contrast */
-    --success: 142 76% 36%; /* #22C55E - Success Green */
-    --success-foreground: 0 0% 98%;
+    /* Status Colors - Construction Theme */
+    --success: 142 76% 36%; /* Green #22C55E */
+    --success-foreground: 0 0% 100%;
 
-    --warning: 25 95% 53%; /* #FB923C - Warning Orange */
-    --warning-foreground: 0 0% 98%;
+    --warning: 45 93% 47%; /* Amber #F59E0B */
+    --warning-foreground: 0 0% 9%;
 
-    --destructive: 0 84% 60%; /* #EF4444 - Error Red */
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%; /* Red #EF4444 */
+    --destructive-foreground: 0 0% 100%;
 
-    /* Glass borders and inputs */
-    --border: 0 0% 100% / 0.1;
-    --input: 0 0% 100% / 0.08;
-    --ring: 48 96% 53%; /* Yellow focus ring */
+    /* Borders and inputs - Clean */
+    --border: 0 0% 85%; /* Light gray border */
+    --input: 0 0% 96%; /* Light input background */
+    --ring: 25 95% 53%; /* Orange focus ring */
 
-    /* Enhanced border radius for premium feel */
-    --radius: 1.25rem;
+    /* Clean border radius */
+    --radius: 0.75rem;
+
+    /* Minimal gradients */
+    --gradient-primary: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
+    --gradient-background: linear-gradient(135deg, #FFF7ED 0%, #FED7AA 25%, #FB923C 100%);
+  }
 
     /* Sidebar glass system */
     --sidebar-background: 0 0% 100% / 0.05;
@@ -94,34 +98,28 @@
   }
 
   .dark {
-    /* Enhanced dark mode for premium glassmorphism */
-    --background: 222 84% 3%; /* Even deeper navy */
-    --foreground: 0 0% 98%;
-    --card: 0 0% 100% / 0.06;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 100% / 0.08;
-    --popover-foreground: 0 0% 98%;
-    --primary: 222 84% 4%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 48 96% 50%;
-    --secondary-foreground: 222 84% 5%;
-    --muted: 0 0% 100% / 0.03;
-    --muted-foreground: 0 0% 60%;
-    --accent: 0 0% 100% / 0.08;
-    --accent-foreground: 0 0% 98%;
-    --border: 0 0% 100% / 0.08;
-    --input: 0 0% 100% / 0.06;
-    --ring: 48 96% 50%;
-    --sidebar-background: 0 0% 100% / 0.03;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 48 96% 50%;
-    --sidebar-primary-foreground: 222 84% 5%;
-    --sidebar-accent: 0 0% 100% / 0.08;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 100% / 0.08;
-    --sidebar-ring: 48 96% 50%;
+    /* Dark mode - Construction Theme */
+    --background: 0 0% 9%; /* Dark background */
+    --foreground: 0 0% 95%; /* Light text */
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 25 95% 53%; /* Keep orange primary */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 95%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 25 95% 53%;
+    --success: 142 76% 36%;
+    --warning: 45 93% 47%;
+    --destructive: 0 62% 30%;
   }
-}
 
 @layer base {
   * {
@@ -131,7 +129,7 @@
 
   body {
     @apply bg-background text-foreground font-normal antialiased;
-    background: var(--gradient-primary);
+    background: var(--gradient-background);
     background-size: 400% 400%;
     animation: gradientShift 20s ease infinite;
     position: relative;
