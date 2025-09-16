@@ -7,17 +7,17 @@
 
 @layer base {
   :root {
-    /* macOS Construction Theme - Clean & Professional */
-    --background: 0 0% 100%; /* White background */
+    /* macOS Light Grey Theme with Glassmorphism */
+    --background: 0 0% 96%; /* Light grey background like macOS */
     --foreground: 0 0% 9%; /* Black text */
 
-    /* Glass Card System - Minimal */
-    --card: 0 0% 100%; /* White cards */
+    /* Glass Card System - macOS style */
+    --card: 0 0% 100% / 0.7; /* Semi-transparent white cards */
     --card-foreground: 0 0% 9%; /* Black text on cards */
-    --card-border: 0 0% 85%; /* Light border */
+    --card-border: 0 0% 100% / 0.3; /* Glass border */
 
     /* Popover backgrounds */
-    --popover: 0 0% 100%;
+    --popover: 0 0% 100% / 0.8;
     --popover-foreground: 0 0% 9%;
 
     /* Construction Orange Primary */
@@ -26,15 +26,15 @@
     --primary-glow: 25 95% 60%; /* Lighter orange for glow */
 
     /* Neutral Secondary */
-    --secondary: 0 0% 96%; /* Light gray */
+    --secondary: 0 0% 94%; /* Light gray */
     --secondary-foreground: 0 0% 9%;
 
     /* Muted elements - macOS style */
-    --muted: 0 0% 96%; /* Light gray background */
+    --muted: 0 0% 94%; /* Light gray background */
     --muted-foreground: 0 0% 45%; /* Medium gray text */
 
-    /* Accent system */
-    --accent: 0 0% 96%;
+    /* Glass accent system */
+    --accent: 0 0% 100% / 0.5;
     --accent-foreground: 0 0% 9%;
 
     /* Status Colors - Construction Theme */
@@ -47,17 +47,25 @@
     --destructive: 0 84% 60%; /* Red #EF4444 */
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs - Clean */
-    --border: 0 0% 85%; /* Light gray border */
-    --input: 0 0% 96%; /* Light input background */
+    /* Glass borders and inputs */
+    --border: 0 0% 100% / 0.2; /* Glass border */
+    --input: 0 0% 100% / 0.3; /* Glass input background */
     --ring: 25 95% 53%; /* Orange focus ring */
 
     /* Clean border radius */
     --radius: 0.75rem;
 
-    /* Minimal gradients */
+    /* Glass gradients for macOS */
     --gradient-primary: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
-    --gradient-background: linear-gradient(135deg, #FFF7ED 0%, #FED7AA 25%, #FB923C 100%);
+    --gradient-background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #CBD5E1 100%);
+    
+    /* Glassmorphism variables */
+    --glass-bg-primary: rgba(255, 255, 255, 0.25);
+    --glass-bg-secondary: rgba(255, 255, 255, 0.35);
+    --glass-border-primary: rgba(255, 255, 255, 0.3);
+    --glass-border-secondary: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --glass-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.15);
   }
 
     /* Sidebar glass system */
@@ -190,8 +198,8 @@
     background: var(--glass-bg-primary);
     backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--glass-border-primary);
-    box-shadow: var(--glass-shadow-primary);
-    transition: var(--transition-glass);
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
     border-radius: var(--radius);
   }
 
