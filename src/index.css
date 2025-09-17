@@ -7,23 +7,28 @@
 
 @layer base {
   :root {
-    /* macOS Light Grey Theme with Glassmorphism */
-    --background: 0 0% 96%; /* Light grey background like macOS */
-    --foreground: 0 0% 9%; /* Black text */
+    /* Construction Blue + Orange Theme */
+    --background: 210 40% 98%; /* Clean white/light blue background */
+    --foreground: 222 84% 5%; /* Deep construction blue */
 
-    /* Glass Card System - macOS style */
-    --card: 0 0% 100% / 0.7; /* Semi-transparent white cards */
-    --card-foreground: 0 0% 9%; /* Black text on cards */
+    /* Glass Card System - Construction themed */
+    --card: 0 0% 100% / 0.8; /* Semi-transparent white cards */
+    --card-foreground: 222 84% 5%; /* Deep blue text on cards */
     --card-border: 0 0% 100% / 0.3; /* Glass border */
 
     /* Popover backgrounds */
-    --popover: 0 0% 100% / 0.8;
-    --popover-foreground: 0 0% 9%;
+    --popover: 0 0% 100% / 0.9;
+    --popover-foreground: 222 84% 5%;
 
     /* Construction Orange Primary */
     --primary: 25 95% 53%; /* #FB923C - Construction Orange */
     --primary-foreground: 0 0% 100%; /* White text on orange */
     --primary-glow: 25 95% 60%; /* Lighter orange for glow */
+    
+    /* Construction Blue Secondary */
+    --construction-blue: 222 84% 5%; /* Deep construction blue */
+    --construction-blue-light: 214 32% 91%; /* Light blue accent */
+    --construction-blue-medium: 213 27% 84%; /* Medium blue */
 
     /* Neutral Secondary */
     --secondary: 0 0% 94%; /* Light gray */
@@ -55,9 +60,11 @@
     /* Clean border radius */
     --radius: 0.75rem;
 
-    /* Glass gradients for macOS */
+    /* Construction gradients */
     --gradient-primary: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
-    --gradient-background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #CBD5E1 100%);
+    --gradient-construction: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #FB923C 100%);
+    --gradient-background: linear-gradient(135deg, #F8FAFC 0%, #E0F2FE 50%, #FFF7ED 100%);
+    --gradient-blueprint: linear-gradient(90deg, transparent 98%, rgba(30, 58, 138, 0.3) 100%), linear-gradient(180deg, transparent 98%, rgba(30, 58, 138, 0.3) 100%);
     
     /* Glassmorphism variables */
     --glass-bg-primary: rgba(255, 255, 255, 0.25);
@@ -139,11 +146,12 @@
     @apply bg-background text-foreground font-normal antialiased;
     background: var(--gradient-background);
     background-size: 400% 400%;
-    animation: gradientShift 20s ease infinite;
+    animation: gradientShift 30s ease infinite;
     position: relative;
     overflow-x: hidden;
   }
 
+  /* Construction blueprint grid overlay */
   body::before {
     content: '';
     position: fixed;
@@ -151,12 +159,29 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-      radial-gradient(circle at 20% 20%, rgba(252, 211, 77, 0.1) 0%, transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 40% 60%, rgba(239, 68, 68, 0.06) 0%, transparent 30%);
+    background-image: 
+      var(--gradient-blueprint),
+      radial-gradient(circle at 25% 25%, rgba(251, 146, 60, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(30, 58, 138, 0.08) 0%, transparent 50%);
+    background-size: 50px 50px, 800px 800px, 1200px 1200px;
     pointer-events: none;
     z-index: -1;
+    opacity: 0.4;
+  }
+
+  /* Animated construction crane silhouette */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 10%;
+    right: 5%;
+    width: 200px;
+    height: 200px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M20 180 L20 40 L180 40 L180 60 L160 60 L160 180' stroke='%231E3A8A' stroke-width='3' fill='none' opacity='0.1'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+    pointer-events: none;
+    z-index: -1;
+    animation: float 8s ease-in-out infinite;
   }
 
   @keyframes gradientShift {

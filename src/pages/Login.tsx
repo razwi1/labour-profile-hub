@@ -1,11 +1,11 @@
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
-import loginGraphics from "@/assets/login-graphics.jpg";
-import { Building2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { HardHat, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 const Login = () => {
@@ -14,24 +14,43 @@ const Login = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-6">
-      {/* Background Elements */}
-      <div 
-        className="absolute top-10 right-10 w-80 h-60 rounded-3xl opacity-10 animate-float"
-        style={{
-          backgroundImage: `url(${loginGraphics})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      />
-      <div 
-        className="absolute bottom-10 left-10 w-64 h-48 rounded-3xl opacity-8 rotate-12 animate-float"
-        style={{
-          backgroundImage: `url(${loginGraphics})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          animationDelay: '1s'
-        }}
-      />
+      {/* Construction blueprint background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute inset-0 opacity-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.05 }}
+          transition={{ duration: 2 }}
+        >
+          <div 
+            className="absolute inset-0" 
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(30, 58, 138, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 58, 138, 0.3) 1px, transparent 1px)
+              `,
+              backgroundSize: '40px 40px'
+            }} 
+          />
+        </motion.div>
+      </div>
+      
+      {/* Back to home button */}
+      <motion.div
+        className="absolute top-6 left-6"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/")}
+          className="glass-card text-construction-blue hover:text-primary"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Button>
+      </motion.div>
       
       {/* Main Login Card */}
       <div className="w-full max-w-md relative z-10 animate-slide-up">
@@ -39,10 +58,10 @@ const Login = () => {
           <CardHeader className="text-center space-y-6">
             {/* Logo */}
             <div className="flex items-center justify-center gap-3">
-              <div className="neuro-container p-3 rounded-xl">
-                <Building2 className="w-8 h-8 text-secondary" />
+              <div className="w-12 h-12 bg-gradient-to-r from-construction-blue to-primary rounded-full flex items-center justify-center shadow-lg">
+                <HardHat className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold text-gradient">LabourLink</span>
+              <span className="text-2xl font-bold text-transparent bg-gradient-to-r from-construction-blue to-primary bg-clip-text">LabourLink</span>
             </div>
             <div>
               <CardTitle className="text-3xl font-bold text-foreground">Welcome Back</CardTitle>
