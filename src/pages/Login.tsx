@@ -7,10 +7,14 @@ import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import { HardHat, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import ImageCollage from "@/components/ImageCollage";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { theme } = useTheme();
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-6">
@@ -53,7 +57,7 @@ const Login = () => {
       </motion.div>
       
       {/* Main Login Card */}
-      <div className="w-full max-w-md relative z-10 animate-slide-up">
+      <div className="w-full max-w-md relative z-20">
         <Card className="glass-card border-glass shadow-glass-hover">
           <CardHeader className="text-center space-y-6">
             {/* Logo */}

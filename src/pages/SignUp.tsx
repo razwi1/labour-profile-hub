@@ -8,11 +8,14 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import loginGraphics from "@/assets/login-graphics.jpg";
+import ImageCollage from "@/components/ImageCollage";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -109,24 +112,14 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4 relative overflow-hidden">
-      <div 
-        className="absolute top-20 left-10 w-56 h-40 opacity-15 rounded-lg -rotate-12"
-        style={{
-          backgroundImage: `url(${loginGraphics})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      ></div>
-      <div 
-        className="absolute bottom-20 right-10 w-40 h-32 opacity-20 rounded-lg rotate-6"
-        style={{
-          backgroundImage: `url(${loginGraphics})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      ></div>
-      <Card className="w-full max-w-md relative z-10 backdrop-blur-sm border-border/50">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Image Collage Background */}
+      <ImageCollage />
+      
+      {/* Theme Toggle */}
+      <ThemeToggle />
+      
+      <Card className="w-full max-w-md relative z-20 backdrop-blur-sm border-border/50">
         <CardHeader className="text-center">
           <div className="flex items-center justify-between mb-2">
             <Button 
