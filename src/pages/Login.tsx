@@ -4,11 +4,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
-import { Building2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import ComicCollage from "@/components/ComicCollage";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
+import Logo from "@/assets/Labour_Logo.png"; // Import the PNG log
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,35 +32,39 @@ const Login = () => {
             : 'bg-white/20 border-black/10'
         }`}>
           <CardHeader className="text-center space-y-6">
-            {/* Logo */}
-            <div className="flex items-center justify-center gap-3">
-              <div className={`p-3 rounded-xl ${
-                theme === 'dark' ? 'bg-white/10' : 'bg-black/10'
-              }`}>
-                <Building2 className={`w-8 h-8 ${
-                  theme === 'dark' ? 'text-white' : 'text-black'
-                }`} />
-              </div>
-              <span className={`text-2xl font-bold ${
-                theme === 'dark' ? 'text-white' : 'text-black'
-              }`}>
-                LabourLink
-              </span>
-            </div>
-            <div>
-              <CardTitle className={`text-3xl font-bold ${
-                theme === 'dark' ? 'text-white' : 'text-black'
-              }`}>
-                Welcome Back
-              </CardTitle>
-              <CardDescription className={`text-lg ${
-                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-              }`}>
-                Sign in to your construction workspace
-              </CardDescription>
-            </div>
-          </CardHeader>
-          
+  {/* Logo */}
+  <div className="flex items-center justify-center gap-3">
+    <div className={`p-3 rounded-xl ${
+      theme === 'dark' ? 'bg-white/10' : 'bg-black/10'
+    }`}>
+      <img
+        src={Logo}
+        alt="LabourLink Logo"
+        className={`h-12 w-auto transition-colors duration-300 ${
+          theme === 'light' ? 'invert' : ''
+        }`}
+      />
+    </div>
+    <span className={`text-2xl font-bold ${
+      theme === 'dark' ? 'text-white' : 'text-black'
+    }`}>
+      LabourLink
+    </span>
+  </div>
+  <div>
+    <CardTitle className={`text-3xl font-bold ${
+      theme === 'dark' ? 'text-white' : 'text-black'
+    }`}>
+      Welcome Back
+    </CardTitle>
+    <CardDescription className={`text-lg ${
+      theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+    }`}>
+      Sign in to your construction workspace
+    </CardDescription>
+  </div>
+</CardHeader>
+
           <CardContent className="space-y-6">
             {/* Login Form */}
             <div className="space-y-4">

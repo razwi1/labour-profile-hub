@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import labourlinkHero from "@/assets/labourlink_hero.mp4";
-import { ArrowRight, Building2 } from "lucide-react";
+import Logo from "@/assets/Labour_Logo.png"; // Import your PNG logo
+import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -22,14 +23,30 @@ const Index = () => {
       {/* Video Overlay */}
       <div className="absolute inset-0 bg-black/40" />
       
+      {/* Top-left Logo */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-6 left-6 z-30"
+      >
+        <img
+          src={Logo}
+          alt="LabourLink Logo"
+          className="h-24 w-auto cursor-pointer transition-all duration-300"
+        />
+      </button>
+
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6">
         {/* Hero Section */}
         <div className="text-center space-y-8 animate-slide-up">
-          {/* Logo/Brand */}
+          {/* Logo/Brand next to text */}
           <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="neuro-container p-4 rounded-2xl bg-white/10 backdrop-blur-sm">
-              <Building2 className="w-12 h-12 text-white" />
+            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-sm">
+              <img
+                src={Logo}
+                alt="LabourLink Logo"
+                className="h-24 w-auto"
+              />
             </div>
             <h1 className="text-6xl md:text-8xl font-bold text-white drop-shadow-2xl">
               LabourLink

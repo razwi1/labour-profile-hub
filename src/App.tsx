@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import UserRoleSelection from "./pages/UserRoleSelection";
 import VerificationPending from "./pages/VerificationPending";
 import ContractorComingSoon from "./pages/ContractorComingSoon";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -22,24 +23,24 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/verification-pending" element={<VerificationPending />} />
-          <Route path="/contractor-coming-soon" element={<ContractorComingSoon />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/labour-profile" element={<LabourProfile />} />
-          <Route path="/supervisor-dashboard" element={<SupervisorDashboard />} />
-          <Route path="/client-dashboard" element={<ClientDashboard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      {/* Remove BrowserRouter from here */}
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/user-role-selection" element={<UserRoleSelection />} />
+        <Route path="/verification-pending" element={<VerificationPending />} />
+        <Route path="/contractor-coming-soon" element={<ContractorComingSoon />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/labour-profile" element={<LabourProfile />} />
+        <Route path="/supervisor-dashboard" element={<SupervisorDashboard />} />
+        <Route path="/client-dashboard" element={<ClientDashboard />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </TooltipProvider>
   </QueryClientProvider>
 );
+
 
 export default App;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Building2, Mail, Lock, Eye, EyeOff, Upload, X } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/hooks/use-toast';
+import Logo from "@/assets/Labour_Logo.png"; // Import the PNG logo
 
 interface TabbedAuthFormProps {
   onSuccess?: () => void;
@@ -16,6 +18,7 @@ interface TabbedAuthFormProps {
 const TabbedAuthForm: React.FC<TabbedAuthFormProps> = ({ onSuccess }) => {
   const { theme } = useTheme();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,49 +41,13 @@ const TabbedAuthForm: React.FC<TabbedAuthFormProps> = ({ onSuccess }) => {
   const [documents, setDocuments] = useState<File[]>([]);
 
   const handleLogin = async () => {
-    setIsLoading(true);
-    // Simulate login
-    setTimeout(() => {
-      toast({
-        title: "Success",
-        description: "Logged in successfully!",
-        variant: "default"
-      });
-      onSuccess?.();
-      setIsLoading(false);
-    }, 1000);
+    // Navigate to user role selection page for demo
+    navigate('/user-role-selection');
   };
 
   const handleSignup = async () => {
-    if (signupData.password !== signupData.confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!signupData.role) {
-      toast({
-        title: "Error",
-        description: "Please select a user role",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    // Simulate signup
-    setTimeout(() => {
-      toast({
-        title: "Success",
-        description: "Account created successfully!",
-        variant: "default"
-      });
-      onSuccess?.();
-      setIsLoading(false);
-    }, 1000);
+    // Navigate to user role selection page first
+    navigate('/user-role-selection');
   };
 
   const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,62 +68,67 @@ const TabbedAuthForm: React.FC<TabbedAuthFormProps> = ({ onSuccess }) => {
         : 'bg-white/20 border-black/10'
     }`}>
       <CardHeader className="text-center space-y-6">
-        {/* Logo */}
-        <div className="flex items-center justify-center gap-3">
-          <div className={`p-3 rounded-xl ${
-            theme === 'dark' ? 'bg-white/10' : 'bg-black/10'
-          }`}>
-            <Building2 className={`w-8 h-8 ${
+          {/* Logo */}
+          <div className="flex items-center justify-center gap-3">
+            <div className={`p-3 rounded-xl ${
+              theme === 'dark' ? 'bg-white/10' : 'bg-black/10'
+            }`}>
+              <img
+                src={Logo}
+                alt="LabourLink Logo"
+                className={`h-16 w-auto transition-colors duration-300 ${
+                  theme === 'light' ? 'invert' : ''
+                }`}
+              />
+            </div>
+            <span className={`text-2xl font-bold ${
               theme === 'dark' ? 'text-white' : 'text-black'
-            }`} />
+            }`}>
+              LabourLink
+            </span>
           </div>
-          <span className={`text-2xl font-bold ${
-            theme === 'dark' ? 'text-white' : 'text-black'
-          }`}>
-            LabourLink
-          </span>
-        </div>
+        
+          {/* Tabs */}
+          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+            <button
+              onClick={() => setActiveTab('login')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                activeTab === 'login'
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => setActiveTab('signup')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                activeTab === 'signup'
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              Sign Up
+            </button>
+          </div>
+        
+          <div>
+            <CardTitle className={`text-3xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-black'
+            }`}>
+              {activeTab === 'login' ? 'Welcome Back' : 'Create Account'}
+            </CardTitle>
+            <CardDescription className={`text-lg ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              {activeTab === 'login' 
+                ? 'Sign in to your construction workspace' 
+                : 'Sign up to get started'
+              }
+            </CardDescription>
+          </div>
+        </CardHeader>
 
-        {/* Tabs */}
-        <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-          <button
-            onClick={() => setActiveTab('login')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-              activeTab === 'login'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-            }`}
-          >
-            Login
-          </button>
-          <button
-            onClick={() => setActiveTab('signup')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-              activeTab === 'signup'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-            }`}
-          >
-            Sign Up
-          </button>
-        </div>
-
-        <div>
-          <CardTitle className={`text-3xl font-bold ${
-            theme === 'dark' ? 'text-white' : 'text-black'
-          }`}>
-            {activeTab === 'login' ? 'Welcome Back' : 'Create Account'}
-          </CardTitle>
-          <CardDescription className={`text-lg ${
-            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-          }`}>
-            {activeTab === 'login' 
-              ? 'Sign in to your construction workspace' 
-              : 'Sign up to get started'
-            }
-          </CardDescription>
-        </div>
-      </CardHeader>
 
       <CardContent className="space-y-6">
         {activeTab === 'login' ? (

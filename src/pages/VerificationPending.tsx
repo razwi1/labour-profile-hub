@@ -58,7 +58,7 @@ const VerificationPending = () => {
             <Button 
               variant="outline" 
               className="flex-1"
-              onClick={() => navigate('/signup')}
+              onClick={() => navigate('/user-role-selection')}
             >
               Sign Up Again
             </Button>
