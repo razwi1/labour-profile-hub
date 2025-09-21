@@ -54,7 +54,26 @@ const UserRoleSelection: React.FC = () => {
 
   const handleRoleSelect = (roleId: string) => {
     console.log(`Selected role: ${roleId}`);
+  
+    // Navigate based on role
+    switch (roleId) {
+      case "labour":
+        navigate("/labour-profile");
+        break;
+      /*case "supervisor":
+        navigate("/supervisor-dashboard");
+        break;
+      case "site_manager":
+        navigate("/admin-dashboard"); // or site manager dashboard if you have one
+        break;
+      case "client":
+        navigate("/client-dashboard");
+        break;*/
+      default:
+        break;
+    }
   };
+  
 
   return (
     <div
