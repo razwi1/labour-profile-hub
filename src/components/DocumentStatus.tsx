@@ -9,9 +9,12 @@ interface Document {
 
 interface DocumentStatusProps {
   documents: Document[];
+  theme?: "light" | "dark"; // receive theme from parent
 }
 
-export const DocumentStatus = ({ documents }: DocumentStatusProps) => {
+export const DocumentStatus = ({ documents, theme = "light" }: DocumentStatusProps) => {
+  const titleTextColor = theme === "dark" ? "text-white" : "text-black";
+
   const getStatusIcon = (status: Document['status']) => {
     switch (status) {
       case 'verified':
@@ -41,8 +44,8 @@ export const DocumentStatus = ({ documents }: DocumentStatusProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="w-5 h-5" />
+        <CardTitle className={`flex items-center gap-2 ${titleTextColor}`}>
+          <FileText className={`w-5 h-5 ${titleTextColor}`} />
           Document Verification
         </CardTitle>
       </CardHeader>
