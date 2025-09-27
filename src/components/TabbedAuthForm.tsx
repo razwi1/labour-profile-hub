@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import Logo from "@/assets/Labour_Logo.png"; // Import the PNG logo
 
 interface TabbedAuthFormProps {
-  onSuccess?: () => void;
+  onSuccess?: (roleId: string) => void;
 }
 
 const TabbedAuthForm: React.FC<TabbedAuthFormProps> = ({ onSuccess }) => {

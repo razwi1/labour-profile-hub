@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   Table,
   TableBody,
   TableCell,
@@ -13,9 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { 
-  User, 
-  Building2, 
+import {
+  User,
+  Building2,
   UserPlus,
   Edit,
   Trash2,
@@ -122,19 +122,19 @@ const SupervisorDashboard = () => {
   };
 
   const toggleAttendance = (id: number) => {
-    setEmployees(employees.map(emp => 
+    setEmployees(employees.map(emp =>
       emp.id === id ? { ...emp, attendance: !emp.attendance, hoursWorked: emp.attendance ? 0 : 8 } : emp
     ));
   };
 
   const updateHours = (id: number, hours: number) => {
-    setEmployees(employees.map(emp => 
+    setEmployees(employees.map(emp =>
       emp.id === id ? { ...emp, hoursWorked: hours } : emp
     ));
   };
 
   const updateRating = (id: number, rating: number) => {
-    setEmployees(employees.map(emp => 
+    setEmployees(employees.map(emp =>
       emp.id === id ? { ...emp, supervisorRating: rating } : emp
     ));
   };
@@ -170,7 +170,7 @@ const SupervisorDashboard = () => {
   // Generate status indicators based on supervisor data
   const getStatusItems = () => {
     const items = [];
-    
+
     // Attendance Status
     const attendanceRate = (presentEmployees / employees.length) * 100;
     if (attendanceRate >= 90) {
@@ -215,8 +215,8 @@ const SupervisorDashboard = () => {
   };
 
   return (
-    <GlassDashboardLayout 
-      title="Supervisor Dashboard" 
+    <GlassDashboardLayout
+      title="Supervisor Dashboard"
       userRole="supervisor"
       heroContent={
         <div className="hero-card animate-slide-up">
@@ -232,7 +232,7 @@ const SupervisorDashboard = () => {
                 <div className="w-3 h-3 bg-success rounded-full animate-pulse" />
               </div>
             </div>
-            
+
             <div className="flex-1">
               <h2 className="text-4xl font-bold text-gradient mb-2">{supervisorData.name}</h2>
               <p className="text-xl text-muted-foreground mb-6">{supervisorData.position}</p>
@@ -257,7 +257,7 @@ const SupervisorDashboard = () => {
     >
       <div className="space-y-8">
         {/* Status Overview */}
-        <StatusIndicator 
+        <StatusIndicator
           title="Site Management Overview"
           statusItems={getStatusItems()}
         />
@@ -276,7 +276,7 @@ const SupervisorDashboard = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="dashboard-card hover-lift">
             <div className="flex items-center gap-4">
               <div className="neuro-container p-4 rounded-2xl">
@@ -289,7 +289,7 @@ const SupervisorDashboard = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="dashboard-card hover-lift">
             <div className="flex items-center gap-4">
               <div className="neuro-container p-4 rounded-2xl">
@@ -302,7 +302,7 @@ const SupervisorDashboard = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="dashboard-card hover-lift">
             <div className="flex items-center gap-4">
               <div className="neuro-container p-4 rounded-2xl">
@@ -318,7 +318,10 @@ const SupervisorDashboard = () => {
         </div>
 
         {/* Worker Location Map */}
-        <WorkerLocationMap workers={employees} />
+
+        {/*<WorkerLocationMap workers={employees} theme={theme} />*/}
+
+
 
         {/* Employee Management Table */}
         <div className="glass-card p-6 hover-lift">
@@ -435,13 +438,13 @@ const SupervisorDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
                 <YAxis stroke="rgba(255,255,255,0.6)" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '12px',
                     color: 'white'
-                  }} 
+                  }}
                 />
                 <Bar dataKey="present" fill="#22c55e" name="Present" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="absent" fill="#ef4444" name="Absent" radius={[4, 4, 0, 0]} />
@@ -462,13 +465,13 @@ const SupervisorDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
                 <YAxis stroke="rgba(255,255,255,0.6)" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '12px',
                     color: 'white'
-                  }} 
+                  }}
                 />
                 <Line type="monotone" dataKey="hours" stroke="#FACC15" strokeWidth={3} dot={{ fill: '#FACC15', strokeWidth: 2, r: 6 }} />
               </LineChart>
@@ -499,14 +502,14 @@ const SupervisorDashboard = () => {
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
-                <Tooltip 
+                <Tooltip
                   formatter={(value) => `₹${Number(value).toLocaleString()}`}
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '12px',
                     color: 'white'
-                  }} 
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -524,13 +527,13 @@ const SupervisorDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
                 <YAxis stroke="rgba(255,255,255,0.6)" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '12px',
                     color: 'white'
-                  }} 
+                  }}
                 />
                 <Bar dataKey="present" fill="#22c55e" name="Present" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="absent" fill="#ef4444" name="Absent" radius={[4, 4, 0, 0]} />
@@ -551,13 +554,13 @@ const SupervisorDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis dataKey="name" stroke="rgba(255,255,255,0.6)" />
                 <YAxis stroke="rgba(255,255,255,0.6)" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '12px',
                     color: 'white'
-                  }} 
+                  }}
                 />
                 <Line type="monotone" dataKey="hours" stroke="#FACC15" strokeWidth={3} dot={{ fill: '#FACC15', strokeWidth: 2, r: 6 }} />
               </LineChart>
@@ -588,14 +591,14 @@ const SupervisorDashboard = () => {
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
-                <Tooltip 
+                <Tooltip
                   formatter={(value) => `₹${Number(value).toLocaleString()}`}
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '12px',
                     color: 'white'
-                  }} 
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
