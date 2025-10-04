@@ -1,11 +1,10 @@
+// src/pages/SupervisorProfile.tsx
 import React, { useState } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { StarRating } from "@/components/StarRating";
-import { MapPin, IndianRupee, Clock, Users, Target } from "lucide-react";
-import { ProgressBar } from "@/components/ProgressBar";
+import { StarRating } from "@/components/StarRating"; // updated to support editable
+import { MapPin, IndianRupee, Clock, Users } from "lucide-react";
 import StatusIndicator from "@/components/StatusIndicator";
 import WorkerLocationMap from "@/components/WorkerLocationMap";
 import workerProfile from "@/assets/worker-profile.jpg";
@@ -73,12 +72,16 @@ const SupervisorProfile: React.FC<SupervisorProfileProps> = ({ theme }) => {
     ? "bg-[rgba(0,0,0,0.55)] border-[rgba(255,255,255,0.2)] text-white backdrop-blur-xl shadow-md rounded-2xl p-6"
     : "bg-white/60 border-black/20 text-black backdrop-blur-xl shadow-md rounded-2xl p-6";
 
+  const smallCardClass = theme === "dark"
+    ? "bg-[rgba(0,0,0,0.55)] border-[rgba(255,255,255,0.12)] text-white backdrop-blur-xl shadow-md rounded-lg p-4"
+    : "bg-white/70 border-black/10 text-black backdrop-blur-xl shadow-md rounded-lg p-4";
+
   const dailyPayroll = employees.reduce((sum, e) => sum + (e.attendance ? e.dailySalary : 0), 0);
   const totalHours = employees.reduce((sum, e) => sum + e.hoursWorked, 0);
   const presentEmployees = employees.filter(e => e.attendance).length;
 
   const getStatusItems = () => {
-    const items = [];
+    const items: any[] = [];
     const attendanceRate = (presentEmployees / employees.length) * 100;
     items.push({
       section: "Team Attendance",
@@ -97,20 +100,35 @@ const SupervisorProfile: React.FC<SupervisorProfileProps> = ({ theme }) => {
 
   return (
     <div className={containerClass + " space-y-8"}>
-      {/* Supervisor Info */}
-      <div className={glassClass + " flex items-center gap-6"}>
-        <Avatar className="w-32 h-32 border-4 border-secondary/30 shadow-glow">
-          <AvatarImage src={workerProfile} alt={supervisorData.name} />
-          <AvatarFallback>{supervisorData.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-        </Avatar>
-        <div>
-          <h2 className="text-3xl font-bold">{supervisorData.name}</h2>
-          <p className="text-lg">{supervisorData.position}</p>
-          <p className="text-sm flex items-center gap-2 mt-1">
+
+      {/* Top: 3 small cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className={smallCardClass}>
+          <p className="text-sm font-semibold">Rating</p>
+          <div className="flex items-center gap-2 mt-2">
             <StarRating rating={supervisorData.companyRating} size="sm" />
-            {supervisorData.company} - {supervisorData.currentSite.location}
-          </p>
-          <p className="text-sm mt-2">Experience: {supervisorData.experience}</p>
+            <span className="font-bold">{supervisorData.companyRating.toFixed(1)}/5</span>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">Based on company & site feedback</p>
+        </div>
+
+        <div className={smallCardClass}>
+          <p className="text-sm font-semibold">Company & Location</p>
+          <div className="flex items-center gap-2 mt-2">
+            <MapPin className="w-4 h-4" />
+            <div className="flex flex-col">
+              <span className="font-medium">{supervisorData.company}</span>
+              <span className="text-xs text-muted-foreground">{supervisorData.currentSite.location}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={smallCardClass}>
+          <p className="text-sm font-semibold">Experience</p>
+          <div className="mt-2">
+            <span className="text-lg font-bold">{supervisorData.experience}</span>
+            <p className="text-xs text-muted-foreground mt-1">{supervisorData.position}</p>
+          </div>
         </div>
       </div>
 
@@ -121,18 +139,18 @@ const SupervisorProfile: React.FC<SupervisorProfileProps> = ({ theme }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className={glassClass + " flex flex-col items-start gap-2"}>
-          <Users className="w-6 h-6" />
+        <div className={glassClass}>
+          <Users className="w-5 h-5" />
           <p className="font-semibold">Team Attendance</p>
           <p>{presentEmployees}/{employees.length} Present</p>
         </div>
-        <div className={glassClass + " flex flex-col items-start gap-2"}>
-          <Clock className="w-6 h-6" />
+        <div className={glassClass}>
+          <Clock className="w-5 h-5" />
           <p className="font-semibold">Total Hours</p>
           <p>{totalHours}h</p>
         </div>
-        <div className={glassClass + " flex flex-col items-start gap-2"}>
-          <IndianRupee className="w-6 h-6" />
+        <div className={glassClass}>
+          <IndianRupee className="w-5 h-5" />
           <p className="font-semibold">Daily Payroll</p>
           <p>₹{dailyPayroll.toLocaleString()}</p>
         </div>
@@ -140,17 +158,48 @@ const SupervisorProfile: React.FC<SupervisorProfileProps> = ({ theme }) => {
 
       {/* Employee Table */}
       <div className={glassClass}>
-        <p className="font-semibold mb-4">Employee Management</p>
+        <div className="flex items-center justify-between mb-4">
+          <p className="font-semibold">Employee Management</p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const newId = employees.length + 1;
+              setEmployees([
+                ...employees,
+                {
+                  id: newId,
+                  name: "New Labour",
+                  role: "New Role",
+                  attendance: false,
+                  hoursWorked: 0,
+                  supervisorRating: 0,
+                  dailySalary: 0,
+                  overallRating: 0,
+                  avatar: workerProfile,
+                  location: { lat: 0, lng: 0, address: "" },
+                  status: 'offline'
+                },
+              ]);
+            }}
+          >
+            Add Labour
+          </Button>
+        </div>
+
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Employee</TableHead>
               <TableHead>Attendance</TableHead>
               <TableHead>Hours</TableHead>
-              <TableHead>Rating</TableHead>
+              <TableHead>Supervisor Rating</TableHead>
+              <TableHead>Overall Rating</TableHead>
               <TableHead>Daily Salary</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {employees.map(e => (
               <TableRow key={e.id} className="hover:bg-white/10 transition-colors">
@@ -158,17 +207,61 @@ const SupervisorProfile: React.FC<SupervisorProfileProps> = ({ theme }) => {
                   <div className="flex items-center gap-2">
                     <Avatar className="w-10 h-10 border-2">
                       <AvatarImage src={e.avatar} />
-                      <AvatarFallback>{e.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      <AvatarFallback>{e.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                     </Avatar>
                     <span>{e.name}</span>
                   </div>
                 </TableCell>
+
                 <TableCell>
-                  <Button variant="ghost" onClick={() => toggleAttendance(e.id)}>{e.attendance ? "Present" : "Absent"}</Button>
+                  <Button
+                    variant={e.attendance ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => toggleAttendance(e.id)}
+                  >
+                    {e.attendance ? "Present" : "Absent"}
+                  </Button>
                 </TableCell>
+
                 <TableCell>{e.hoursWorked}</TableCell>
-                <TableCell><StarRating rating={e.supervisorRating} size="sm" /></TableCell>
+
+                <TableCell>
+                  <StarRating
+                    rating={e.supervisorRating}
+                    size="sm"
+                    editable
+                    onChange={(newRating) =>
+                      setEmployees(
+                        employees.map(emp =>
+                          emp.id === e.id ? { ...emp, supervisorRating: newRating } : emp
+                        )
+                      )
+                    }
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <StarRating rating={e.overallRating} size="sm" />
+                </TableCell>
+
                 <TableCell>₹{e.dailySalary}</TableCell>
+
+                <TableCell className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => alert(`Edit ${e.name}`)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setEmployees(employees.filter(emp => emp.id !== e.id))}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -180,7 +273,6 @@ const SupervisorProfile: React.FC<SupervisorProfileProps> = ({ theme }) => {
         <p className="font-semibold mb-4">Team Location</p>
         <WorkerLocationMap workers={employees} theme={theme} />
       </div>
-
     </div>
   );
 };

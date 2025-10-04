@@ -9,6 +9,7 @@ import LabourProfile from "@/pages/LabourProfile";
 import SupervisorProfile from "@/pages/SupervisorProfile";
 import SitemanagerProfile from "@/pages/SitemanagerProfile";
 import ClientProfile from "@/pages/ClientProfile";
+
 import workerProfile from "@/assets/worker-profile.jpg";
 import labourLogo from "@/assets/Labour_Logo.png";
 
@@ -54,15 +55,39 @@ const Dashboard: React.FC = () => {
       ? "bg-[rgba(0,0,0,0.6)] border-[rgba(255,255,255,0.2)] text-white backdrop-blur-xl shadow-lg"
       : "bg-white/70 border-black/20 text-black backdrop-blur-xl shadow-lg";
 
+  // 🟢 Role-based user details
+  const getUserDetails = () => {
+    switch (role) {
+      case "labour":
+        return { name: "Rajesh Kumar", subRole: "Labour Worker" };
+      case "supervisor":
+        return { name: "Pradeep Sharma", subRole: "Site Supervisor" };
+      case "site_manager":
+        return { name: "Amit Verma", subRole: "Site Manager" };
+      case "client":
+        return { name: "ABC Constructions Pvt. Ltd.", subRole: "Client Company" };
+      default:
+        return { name: "Unknown", subRole: "" };
+    }
+  };
+
+  const { name, subRole } = getUserDetails();
+
   return (
     <div className={`flex min-h-screen ${containerClass}`}>
       {/* Sidebar */}
-      <aside className={`relative ${sidebarOpen ? "w-72" : "w-20"} flex flex-col transition-all duration-300 border p-3 ${sidebarThemeClass} rounded-2xl shadow-lg m-4`}>
+      <aside
+        className={`relative ${sidebarOpen ? "w-72" : "w-20"} flex flex-col transition-all duration-300 border p-3 ${sidebarThemeClass} rounded-2xl shadow-lg m-4`}
+      >
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             {sidebarOpen && (
               <div onClick={() => navigate("/")} className="cursor-pointer flex items-center gap-3">
-                <img src={labourLogo} alt="Logo" className={`h-16 w-auto transition filter ${theme === "dark" ? "" : "invert"}`} />
+                <img
+                  src={labourLogo}
+                  alt="Logo"
+                  className={`h-16 w-auto transition filter ${theme === "dark" ? "" : "invert"}`}
+                />
               </div>
             )}
             <div className="flex items-center gap-2">
@@ -85,19 +110,32 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* User avatar */}
+          {/* User avatar / Company name */}
           <div className="flex flex-col items-center">
-            <Avatar className={`${sidebarOpen ? "w-24 h-24" : "w-10 h-10"} border-2 shadow-md`}>
-              <AvatarImage src={workerProfile} alt="User" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
+            {role !== "client" ? (
+              <Avatar className={`${sidebarOpen ? "w-24 h-24" : "w-10 h-10"} border-2 shadow-md`}>
+                <AvatarImage src={workerProfile} alt="User" />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+            ) : (
+              <div
+                className={`flex items-center justify-center font-bold text-lg ${
+                  sidebarOpen ? "w-24 h-24" : "w-10 h-10"
+                } rounded-full bg-primary text-white`}
+              >
+                {name.charAt(0)}
+              </div>
+            )}
+
             {sidebarOpen && (
               <div className="text-center mt-2">
-                <div className="font-semibold">Rajesh Kumar</div>
-                <div className="text-sm capitalize">{role}</div>
-                <div className="mt-1">
-                  <Badge variant="outline">Active on Site</Badge>
-                </div>
+                <div className="font-semibold">{name}</div>
+                <div className="text-sm capitalize">{subRole}</div>
+                {role !== "client" && (
+                  <div className="mt-1">
+                    <Badge variant="outline">Active on Site</Badge>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -106,7 +144,11 @@ const Dashboard: React.FC = () => {
           <Button variant="ghost" className="w-full flex items-center gap-3" disabled>
             <LayoutDashboard className="w-5 h-5" /> {collapseText("Dashboard")}
           </Button>
-          <Button variant="ghost" onClick={() => navigate("/user-role-selection")} className="w-full flex items-center gap-3">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/user-role-selection")}
+            className="w-full flex items-center gap-3"
+          >
             <LogOut className="w-4 h-4" /> {collapseText("Logout")}
           </Button>
         </div>
